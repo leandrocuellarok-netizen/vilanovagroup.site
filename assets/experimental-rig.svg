@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 900" role="img" aria-labelledby="title desc">
+<title id="title">Archive 002 — Mechanical interface study</title>
+<desc id="desc">An original monochrome archival illustration of an anonymous synthetic human head inside an experimental mechanical measurement frame, with calibration marks and analog film grain.</desc>
+<defs>
+ <radialGradient id="bg"><stop stop-color="#343430"/><stop offset=".7" stop-color="#171715"/><stop offset="1" stop-color="#080808"/></radialGradient>
+ <linearGradient id="skin" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e5e2d8"/><stop offset=".42" stop-color="#96948b"/><stop offset="1" stop-color="#34332f"/></linearGradient>
+ <linearGradient id="steel" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#353531"/><stop offset=".25" stop-color="#d5d2c8"/><stop offset=".5" stop-color="#5e5d57"/><stop offset=".78" stop-color="#e1ded4"/><stop offset="1" stop-color="#393834"/></linearGradient>
+ <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".82" numOctaves="3" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="table" tableValues="0 .18"/></feComponentTransfer><feBlend in="SourceGraphic" mode="soft-light"/></filter>
+ <filter id="soft"><feGaussianBlur stdDeviation="18"/></filter>
+</defs>
+<rect width="1800" height="900" fill="url(#bg)"/>
+<g opacity=".12" fill="none" stroke="#d8d5cb"><path d="M900 38V860M120 450H1680"/><circle cx="900" cy="450" r="355"/><circle cx="900" cy="450" r="405" stroke-dasharray="3 12"/><circle cx="900" cy="450" r="450" stroke-dasharray="72 8 3 8"/></g>
+<ellipse cx="900" cy="470" rx="310" ry="350" fill="#d9d6cc" opacity=".1" filter="url(#soft)"/>
+<!-- Mechanical frame -->
+<g fill="none" stroke="url(#steel)" stroke-width="17" stroke-linecap="round" stroke-linejoin="round">
+ <path d="M545 790V260Q545 88 900 88Q1255 88 1255 260V790"/>
+ <path d="M680 790V210M1120 790V210"/>
+ <path d="M460 290H1340M430 520H1370M500 735H1300"/>
+ <path d="M900 70V250M900 650V840"/>
+ <path d="M560 400L720 400M1080 400L1240 400"/>
+</g>
+<g fill="#161614" stroke="#bdbab0" stroke-width="5">
+ <circle cx="545" cy="290" r="24"/><circle cx="1255" cy="290" r="24"/>
+ <circle cx="545" cy="520" r="20"/><circle cx="1255" cy="520" r="20"/>
+ <circle cx="680" cy="735" r="23"/><circle cx="1120" cy="735" r="23"/>
+ <circle cx="900" cy="250" r="17"/><circle cx="900" cy="650" r="17"/>
+</g>
+<!-- Head silhouette -->
+<g transform="translate(900 475)">
+ <path d="M-212-110Q-218-315 0-330Q218-315 212-110L196 115Q175 290 0 335Q-175 290-196 115Z" fill="url(#skin)" stroke="#e0ddd2" stroke-opacity=".55" stroke-width="3"/>
+ <path d="M-212-110Q-165-300 0-300Q165-300 212-110L172-42Q82-78 0-70Q-82-78-172-42Z" fill="#171715"/>
+ <path d="M-165-18Q-105-75-32-38L-44 5Q-108-4-160 35Z" fill="#121210"/>
+ <path d="M32-38Q105-75 165-18L160 35Q108-4 44 5Z" fill="#121210"/>
+ <ellipse cx="-96" cy="-20" rx="16" ry="8" fill="#d4d0c5"/><ellipse cx="96" cy="-20" rx="16" ry="8" fill="#d4d0c5"/>
+ <path d="M0-5L-28 118L0 139L28 118Z" fill="#69675f" stroke="#c9c6bc" stroke-opacity=".5"/>
+ <path d="M-68 215Q0 185 68 215Q0 260-68 215Z" fill="#151513" stroke="#d1cec4" stroke-opacity=".4" stroke-width="2"/>
+ <path d="M-195 70L-245 95M195 70L245 95" stroke="#bdbab0" stroke-width="7"/>
+</g>
+<!-- Head restraint and measuring rails -->
+<g fill="none" stroke="#d4d1c7" stroke-width="5" opacity=".8">
+ <path d="M700 300Q900 235 1100 300"/><path d="M700 300V355M1100 300V355"/>
+ <path d="M720 590Q900 640 1080 590"/><path d="M720 590V650M1080 590V650"/>
+ <path d="M900 88V210M880 205H920"/>
+ <path d="M600 450H710M1090 450H1200"/>
+</g>
+<g fill="#d4ff3f"><circle cx="900" cy="300" r="7"/><circle cx="710" cy="450" r="6"/><circle cx="1090" cy="450" r="6"/><circle cx="900" cy="590" r="7"/></g>
+<!-- Calibration and archive typography -->
+<g fill="#d9d6cc" font-family="monospace" letter-spacing="4">
+ <text x="80" y="90" font-size="18">VILANOVA / ARCHIVE</text>
+ <text x="80" y="122" font-size="11" opacity=".58">MECHANICAL ANTHROPOLOGY / STUDY 002</text>
+ <text x="80" y="820" font-size="13">SPECIMEN 002 — MEASURED IDENTITY</text>
+ <text x="80" y="850" font-size="10" opacity=".55">FIG. B / RECONSTRUCTED APPARATUS / 2026</text>
+ <text x="1710" y="90" font-size="12" text-anchor="end">VG—002 / 02</text>
+ <text x="1710" y="850" font-size="10" text-anchor="end" opacity=".55">OBSERVE / RECORD / QUESTION</text>
+</g>
+<g stroke="#d4ff3f" stroke-width="2" opacity=".72"><path d="M80 170h90M125 125v90M1630 170h90M1675 125v90M80 730h90M125 685v90M1630 730h90M1675 685v90"/></g>
+<g stroke="#d8d5cb" stroke-width="2" opacity=".35">
+ <path d="M480 250h42M480 265h24M480 280h42M1278 250h42M1296 265h24M1278 280h42"/>
+ <path d="M480 700h42M480 715h24M480 730h42M1278 700h42M1296 715h24M1278 730h42"/>
+</g>
+<rect width="1800" height="900" filter="url(#grain)" opacity=".5"/>
+</svg>
