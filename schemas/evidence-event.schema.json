@@ -1,0 +1,301 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vilanovagroup.site/schemas/evidence-event.schema.json",
+  "title": "Vilanova Evidence Event",
+  "description": "A source-attributed observation for Vilanova AI Media and Influence Radar AI. Unknown values must never be represented as zero.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "event_id",
+    "event_type",
+    "entity",
+    "claim",
+    "source",
+    "verification_status",
+    "confidence"
+  ],
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]{2,99}$"
+    },
+    "event_type": {
+      "enum": [
+        "brand_deal",
+        "endorsement",
+        "public_appearance",
+        "news_mention",
+        "platform_metric",
+        "hashtag_observation",
+        "ownership_claim",
+        "trend_signal"
+      ]
+    },
+    "entity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "display_name",
+        "entity_type"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "display_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "entity_type": {
+          "enum": [
+            "person",
+            "creator",
+            "media_group",
+            "outlet",
+            "brand",
+            "organization",
+            "hashtag",
+            "topic"
+          ]
+        },
+        "canonical_url": {
+          "type": "string",
+          "pattern": "^https://"
+        }
+      }
+    },
+    "claim": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2000
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "publisher",
+        "url",
+        "source_type",
+        "captured_at"
+      ],
+      "properties": {
+        "publisher": {
+          "type": "string",
+          "minLength": 1
+        },
+        "url": {
+          "type": "string",
+          "pattern": "^https://"
+        },
+        "source_type": {
+          "enum": [
+            "official_document",
+            "platform_api",
+            "brand_disclosure",
+            "creator_disclosure",
+            "news_report",
+            "research_report",
+            "public_profile",
+            "other"
+          ]
+        },
+        "published_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "captured_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "verification_status": {
+      "enum": [
+        "verified",
+        "unverified",
+        "disputed",
+        "withdrawn"
+      ]
+    },
+    "confidence": {
+      "enum": [
+        "high",
+        "medium",
+        "low"
+      ]
+    },
+    "observation_window": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "start",
+        "end",
+        "timezone"
+      ],
+      "properties": {
+        "start": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "end": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "timezone": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "metric": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "value",
+        "unit",
+        "platform",
+        "scope",
+        "window_start",
+        "window_end"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "value": {
+          "type": "number"
+        },
+        "unit": {
+          "type": "string",
+          "minLength": 1
+        },
+        "platform": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scope": {
+          "type": "string",
+          "minLength": 1
+        },
+        "window_start": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "window_end": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "related_entities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "display_name",
+          "relationship",
+          "status"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "display_name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "relationship": {
+            "enum": [
+              "sponsors",
+              "endorses",
+              "owns",
+              "controls",
+              "mentions",
+              "appears_with",
+              "other"
+            ]
+          },
+          "status": {
+            "enum": [
+              "documented",
+              "claimed",
+              "unverified"
+            ]
+          }
+        }
+      }
+    },
+    "disclosure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "disclosed",
+            "not_disclosed",
+            "unclear",
+            "not_applicable"
+          ]
+        },
+        "text": {
+          "type": "string",
+          "maxLength": 1000
+        }
+      }
+    },
+    "notes": {
+      "type": "string",
+      "maxLength": 3000
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "event_type": {
+            "const": "platform_metric"
+          }
+        },
+        "required": [
+          "event_type"
+        ]
+      },
+      "then": {
+        "required": [
+          "metric",
+          "observation_window"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event_type": {
+            "enum": [
+              "hashtag_observation",
+              "trend_signal"
+            ]
+          }
+        },
+        "required": [
+          "event_type"
+        ]
+      },
+      "then": {
+        "required": [
+          "observation_window"
+        ]
+      }
+    }
+  ]
+}
