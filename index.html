@@ -92,6 +92,7 @@ section{padding:140px 4vw;position:relative;border-top:1px solid var(--line)}.se
 <div class="contact-actions">
 <button class="contact-copy" id="prepare-inquiry" type="button">PREPARE INQUIRY ↗</button>
 <button class="contact-copy contact-copy-secondary" id="copy-inquiry" type="button" disabled>COPY MESSAGE</button>
+<button class="contact-copy contact-copy-secondary" id="download-inquiry" type="button" disabled>DOWNLOAD .TXT</button>
 </div>
 <p class="contact-feedback" id="contact-feedback" aria-live="polite">Your message is prepared locally. No information is transmitted or stored.</p>
 </div>
@@ -135,14 +136,15 @@ ventureIndex?.addEventListener('keydown',event=>{
  else if(event.key==='Home'){event.preventDefault();ventureIndex.scrollTo({left:0,behavior:motion})}
  else if(event.key==='End'){event.preventDefault();ventureIndex.scrollTo({left:ventureIndex.scrollWidth,behavior:motion})}
 });
-const prepareButton=document.getElementById('prepare-inquiry'),copyButton=document.getElementById('copy-inquiry'),feedback=document.getElementById('contact-feedback'),template=document.getElementById('inquiry-template'),inquiryText=document.getElementById('inquiry-text');
+const prepareButton=document.getElementById('prepare-inquiry'),copyButton=document.getElementById('copy-inquiry'),downloadButton=document.getElementById('download-inquiry'),feedback=document.getElementById('contact-feedback'),template=document.getElementById('inquiry-template'),inquiryText=document.getElementById('inquiry-text');
 const inquiryName=document.getElementById('inquiry-name'),inquiryOrganization=document.getElementById('inquiry-organization'),inquiryInterest=document.getElementById('inquiry-interest'),inquiryMessage=document.getElementById('inquiry-message');
 let preparedInquiry=false;
 const invalidateInquiry=()=>{
  if(!preparedInquiry)return;
  preparedInquiry=false;
  copyButton.disabled=true;
- feedback.textContent='FIELDS CHANGED. PREPARE THE INQUIRY AGAIN BEFORE COPYING.';
+ downloadButton.disabled=true;
+ feedback.textContent='FIELDS CHANGED. PREPARE THE INQUIRY AGAIN BEFORE COPYING OR DOWNLOADING.';
 };
 [inquiryName,inquiryOrganization,inquiryInterest,inquiryMessage].forEach(field=>{
  field.addEventListener('input',invalidateInquiry);
@@ -157,7 +159,22 @@ prepareButton.addEventListener('click',()=>{
  template.open=true;
  preparedInquiry=true;
  copyButton.disabled=false;
- feedback.textContent='MESSAGE PREPARED LOCALLY. NO MESSAGE HAS BEEN SENT OR TRANSMITTED.';
+ downloadButton.disabled=false;
+ feedback.textContent='MESSAGE PREPARED LOCALLY. COPY OR DOWNLOAD IT; NO MESSAGE HAS BEEN SENT OR TRANSMITTED.';
+});
+downloadButton.addEventListener('click',()=>{
+ if(!preparedInquiry){feedback.textContent='PREPARE YOUR INQUIRY BEFORE DOWNLOADING THE MESSAGE.';return}
+ const blob=new Blob([inquiryText.textContent],{type:'text/plain;charset=utf-8'});
+ const url=URL.createObjectURL(blob);
+ const link=document.createElement('a');
+ link.href=url;
+ link.download='vilanova-group-inquiry.txt';
+ link.hidden=true;
+ document.body.append(link);
+ link.click();
+ link.remove();
+ window.setTimeout(()=>URL.revokeObjectURL(url),1000);
+ feedback.textContent='MESSAGE DOWNLOADED AS A TEXT FILE. NO INFORMATION WAS TRANSMITTED.';
 });
 copyButton.addEventListener('click',async()=>{
  if(!preparedInquiry){feedback.textContent='PREPARE YOUR INQUIRY BEFORE COPYING THE MESSAGE.';return}
