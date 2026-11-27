@@ -60,7 +60,7 @@ assert.equal(evidenceLedger.schema_version, "1.0.0", "Evidence ledger version mu
 assert.ok(Array.isArray(evidenceLedger.events), "Evidence ledger events must be an array");
 assert.ok(existsSync(resolve(root, "scripts/validate-evidence-ledger.mjs")), "Evidence validator must exist");
 assert.ok(existsSync(resolve(root, "scripts/test-evidence-ledger.mjs")), "Evidence regression tests must exist");
-assert.ok(html.includes('href="/docs/EVIDENCE-LEDGER.md"'), "The public site must link to its evidence protocol");
+assert.ok(html.includes('href="https://github.com/leandrocuellarok-netizen/vilanovagroup.site/blob/main/docs/EVIDENCE-LEDGER.md"'), "The public site must link to its evidence protocol");
 
 const assetPaths = [...new Set([...html.matchAll(/(?:src|href)="(\/assets\/[^"]+)"/g)].map(([, path]) => path))];
 for (const asset of assetPaths) {
