@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 1000" role="img" aria-labelledby="title desc">
+<title id="title">Signal anatomy — machine intelligence study</title><desc id="desc">A dark archival technical plate showing a synthetic neural circuit, branching pathways and calibration marks.</desc>
+<defs><radialGradient id="g"><stop stop-color="#77766f"/><stop offset="1" stop-color="#10100f"/></radialGradient><filter id="n"><feTurbulence type="fractalNoise" baseFrequency=".65" numOctaves="3"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="table" tableValues="0 .18"/></feComponentTransfer><feBlend in="SourceGraphic" mode="screen"/></filter></defs>
+<rect width="1800" height="1000" fill="#11110f"/><rect width="1800" height="1000" fill="url(#g)" opacity=".38"/>
+<g fill="none" stroke="#d8d5cb" stroke-opacity=".28"><path d="M900 90V910M150 500H1650"/><circle cx="900" cy="500" r="350"/><circle cx="900" cy="500" r="420" stroke-dasharray="4 12"/><circle cx="900" cy="500" r="470" stroke-dasharray="80 7 2 7"/></g>
+<g fill="none" stroke="#d4ff3f" stroke-width="3" opacity=".72">
+<path d="M900 500L900 220L730 120L560 120L430 250L280 250M900 500L1080 330L1300 330L1450 180L1600 180M900 500L1120 650L1320 650L1480 800L1640 800M900 500L720 700L520 700L360 850L180 850M900 500L900 780L780 880L620 880"/>
+<path d="M900 220L1010 150L1120 150M1080 330L1080 210L1180 110M1120 650L1120 780L1240 880M720 700L720 560L600 440L460 440"/>
+</g>
+<g fill="#d4ff3f"><circle cx="900" cy="500" r="12"/><circle cx="900" cy="220" r="7"/><circle cx="1080" cy="330" r="7"/><circle cx="1120" cy="650" r="7"/><circle cx="720" cy="700" r="7"/><circle cx="900" cy="780" r="7"/><circle cx="560" cy="120" r="6"/><circle cx="1450" cy="180" r="6"/><circle cx="1480" cy="800" r="6"/><circle cx="360" cy="850" r="6"/></g>
+<g fill="#d9d6cc" font-family="monospace" letter-spacing="5"><text x="70" y="85" font-size="17">INTELLIGENCE / SIGNAL ANATOMY</text><text x="70" y="920" font-size="12" opacity=".6">FIG. 03 — NETWORKED COGNITION / NOT TO SCALE</text><text x="1710" y="85" font-size="12" text-anchor="end">VG—003</text></g>
+<g stroke="#d9d6cc" stroke-opacity=".5"><path d="M70 120h120M70 120v120M1730 120h-120M1730 120v120M70 880h120M70 880V760M1730 880h-120M1730 880V760"/></g>
+<rect width="1800" height="1000" filter="url(#n)" opacity=".5"/>
+</svg>
