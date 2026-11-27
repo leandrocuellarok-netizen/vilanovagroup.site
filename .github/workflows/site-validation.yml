@@ -26,3 +26,5 @@ jobs:
           node-version: 22
       - name: Run structural and JavaScript checks
         run: node scripts/validate-site.mjs
+      - name: Run AI Fabric prompt quality regression tests
+        run: node scripts/test-fabric-prompt.mjs
