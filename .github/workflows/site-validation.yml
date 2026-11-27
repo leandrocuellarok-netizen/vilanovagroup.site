@@ -28,3 +28,7 @@ jobs:
         run: node scripts/validate-site.mjs
       - name: Run AI Fabric prompt quality regression tests
         run: node scripts/test-fabric-prompt.mjs
+      - name: Validate evidence ledger
+        run: node scripts/validate-evidence-ledger.mjs
+      - name: Run evidence ledger regression tests
+        run: node scripts/test-evidence-ledger.mjs
