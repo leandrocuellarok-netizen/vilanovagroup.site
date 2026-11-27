@@ -1,0 +1,49 @@
+# VILANOVA EVIDENCE LEDGER
+
+**Status:** schema and validation contract only. The initial ledger is intentionally empty; no influencer, brand deal, endorsement, audience figure, ownership claim or trend is asserted by this file.
+
+## Purpose
+
+Use one evidence-event format across VILANOVA AI MEDIA and INFLUENCE RADAR AI. The ledger stores source-backed observations, not unqualified conclusions. A report or score must be reproducible from the underlying events.
+
+## Required discipline
+
+- Every event has a stable ID, entity, claim, source URL, publisher, capture timestamp, verification status and confidence.
+- Use HTTPS source URLs. Preserve both publication time and capture time when available.
+- Store timestamps with an explicit UTC offset; render them in America/Argentina/Buenos_Aires for the Argentina desk.
+- Add an observation window for platform metrics, hashtag observations and trend signals. A 24-hour score must identify its exact start and end.
+- A metric records its platform, scope, unit and comparison window. Views are not unique reach; views are not simultaneous viewers.
+- Unknown data is omitted or marked unverified. It is never converted to zero.
+- A mention is not automatically an endorsement. A public post is not automatically a disclosed sponsorship.
+- Keep claims about ownership/control separate from claims about editorial alignment or political affiliation.
+- Do not publish a composite influence score unless coverage, weighting version, normalization and source confidence are disclosed.
+
+## Verification states
+
+| State | Meaning |
+|---|---|
+| verified | The stated fact is directly supported by the linked source and has been checked. |
+| unverified | A source exists, but the claim has not been independently confirmed. |
+| disputed | Credible sources materially conflict or the subject contests the claim. |
+| withdrawn | The claim was retracted, superseded or found unsuitable for use. |
+
+Confidence is a separate assessment of source quality and claim support. It must not be used as a substitute for verification status.
+
+## Files
+
+- schemas/evidence-event.schema.json — machine-readable JSON Schema.
+- data/evidence-events.json — append-only event ledger; currently empty.
+- scripts/validate-evidence-ledger.mjs — dependency-free runtime validator.
+- scripts/test-evidence-ledger.mjs — positive and negative regression tests.
+
+## Operational rules
+
+1. Capture a source before writing an analytical conclusion.
+2. Preserve the original source URL and publisher; do not cite search snippets as the sole evidence.
+3. Record the capture time even when publication time is unavailable.
+4. Deduplicate syndicated or repeated items before calculating prominence.
+5. Keep raw observations immutable; corrections should create a new event or an explicit superseding record rather than silently rewriting history.
+6. Do not infer sentiment, political alignment, sponsorship, reach or ownership from proximity or repeated mentions.
+7. If an API feed becomes stale or unavailable, label the dashboard stale/unavailable. Never animate old values as live.
+
+This ledger is a technical foundation, not a live data connection or a claim that Vilanova currently has access to any provider.
