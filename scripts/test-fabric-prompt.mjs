@@ -31,7 +31,7 @@ for (const [type, expectedWorkstreams, expectedHeading] of cases) {
     assert.ok(prompt.includes("TARGET: " + target + " words minimum"), type + " must retain the selected expansion target");
     assert.ok(prompt.includes(expectedHeading), type + " must include its specialist framework");
     assert.ok(prompt.includes("DOWNSTREAM EXPANSION REQUIREMENT"), "The local blueprint must distinguish itself from the final model-generated prompt");
-    assert.ok(prompt.includes("never repeat paragraphs or pad length"), "The production handoff must prohibit artificial padding");
+    assert.match(prompt, /never repeat paragraphs or pad length/i, "The production handoff must prohibit artificial padding");
 
     const workstreamParagraphs = prompt.split(/\n\s*\n/)
       .filter(block => /^\d{2} — \d{2} \/ /.test(block))
