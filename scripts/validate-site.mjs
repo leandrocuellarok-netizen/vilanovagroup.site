@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { existsSync, readFileSync, mkdtempSync, writeFileSync, rmSync } from "node:fs";
-import { dirname, join, resolve } from "node:path";
+import { join, resolve } from "node:path";
 import { tmpdir } from "node:os";
 import { spawnSync } from "node:child_process";
 
@@ -12,31 +12,31 @@ const html = readFileSync(htmlPath, "utf8");
 const expectedSections = ["ecosystem", "ventures", "intelligence", "ai-solutions", "network"];
 const expectedNav = ["THE ECOSYSTEM", "VENTURES", "VILANOVA AI MEDIA", "VILANOVA AI SOLUTIONS", "NETWORK"];
 
-assert.match(html, /<html\\s+lang="en"/i, "The document must be English");
-const navMatch = html.match(/<nav\\b[^>]*aria-label="Primary navigation"[^>]*>([\\s\\S]*?)<\\/nav>/i);
+assert.match(html, /<html\s+lang="en"/i, "The document must be English");
+const navMatch = html.match(/<nav\b[^>]*aria-label="Primary navigation"[^>]*>([\s\S]*?)<\/nav>/i);
 assert.ok(navMatch, "Primary navigation must exist");
-const navLinks = [...navMatch[1].matchAll(/<a\\b[^>]*href="#([^"]+)"[^>]*>([\\s\\S]*?)<\\/a>/gi)]
+const navLinks = [...navMatch[1].matchAll(/<a\b[^>]*href="#([^"]+)"[^>]*>([\s\S]*?)<\/a>/gi)]
   .map(([, href, label]) => ({ href, label: label.replace(/<[^>]*>/g, "").trim() }));
 assert.deepEqual(navLinks.map(x => x.label), expectedNav, "Primary navigation labels and order must match the approved architecture");
 assert.deepEqual(navLinks.map(x => x.href), expectedSections, "Primary navigation destinations must match the five approved sections");
 
-const sectionIds = [...html.matchAll(/<section\\b[^>]*\\bid="([^"]+)"/gi)].map(([, id]) => id);
+const sectionIds = [...html.matchAll(/<section\b[^>]*\bid="([^"]+)"/gi)].map(([, id]) => id);
 assert.deepEqual(sectionIds, expectedSections, "The page must contain exactly the five approved primary sections");
 assert.ok(!/id="contact"/i.test(html), "A CONTACT section must not return");
-assert.ok(!/href="#contact"/i.test(html), "A CONTACT navigation link must not return");
+assert.ok(!/href="#contact"/i.test(html), "A CONTACT navigation or content link must not return");
 
-const ids = [...html.matchAll(/\\bid="([^"]+)"/g)].map(([, id]) => id);
+const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map(([, id]) => id);
 const duplicateIds = ids.filter((id, index) => ids.indexOf(id) !== index);
 assert.deepEqual([...new Set(duplicateIds)], [], "HTML IDs must be unique");
 const idSet = new Set(ids);
 for (const [, target] of html.matchAll(/href="#([^"]+)"/g)) {
-  assert.ok(idSet.has(target), `Internal link target #${target} must exist`);
+  assert.ok(idSet.has(target), "Internal link target #" + target + " must exist");
 }
 
 const mailto = [...html.matchAll(/mailto:([^"'?]+)/g)].map(([, address]) => address);
 assert.deepEqual(mailto, ["strategy@vilanovagroup.site"], "The only contact channel must be the approved strategy email");
-assert.match(html, /FOUNDER\\s*\\/\\s*LEANDRO A\\. CUELLAR/i, "Founder attribution must be present");
-assert.match(html, /GENERAL COORDINATION\\s*\\/\\s*ERICA ACOSTA/i, "General Coordinator attribution must be present");
+assert.match(html, /FOUNDER\s*\/\s*LEANDRO A\. CUELLAR/i, "Founder attribution must be present");
+assert.match(html, /GENERAL COORDINATION\s*\/\s*ERICA ACOSTA/i, "General Coordinator attribution must be present");
 assert.ok(html.includes("“Behold, I make all things new.”"), "The exact footer quotation must be present");
 assert.ok(html.includes("REVELATION 21:5 — KJV"), "The footer citation must identify Revelation 21:5 KJV");
 
@@ -49,20 +49,20 @@ assert.ok(!html.includes("while(count<target"), "AI Fabric must not pad word cou
 assert.ok(html.includes("prefers-reduced-motion: reduce"), "Reduced-motion support must remain in place");
 assert.ok(html.includes("focus-visible"), "Visible keyboard focus styles must remain in place");
 
-const assetPaths = [...new Set([...html.matchAll(/(?:src|href)="(\\/assets\\/[^"]+)"/g)].map(([, path]) => path))];
+const assetPaths = [...new Set([...html.matchAll(/(?:src|href)="(\/assets\/[^"]+)"/g)].map(([, path]) => path))];
 for (const asset of assetPaths) {
-  assert.ok(existsSync(resolve(root, `.${asset}`)), `Referenced asset must exist: ${asset}`);
+  assert.ok(existsSync(resolve(root, "." + asset)), "Referenced asset must exist: " + asset);
 }
 
 const tempDir = mkdtempSync(join(tmpdir(), "vilanova-inline-js-"));
 try {
   let checkedScripts = 0;
-  for (const [, attrs, source] of html.matchAll(/<script\\b([^>]*)>([\\s\\S]*?)<\\/script>/gi)) {
-    if (/type=["']application\\/ld\\+json["']/i.test(attrs)) continue;
-    const scriptPath = join(tempDir, `inline-${checkedScripts}.js`);
+  for (const [, attrs, source] of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)) {
+    if (/type=["']application\/ld\+json["']/i.test(attrs)) continue;
+    const scriptPath = join(tempDir, "inline-" + checkedScripts + ".js");
     writeFileSync(scriptPath, source, "utf8");
     const result = spawnSync(process.execPath, ["--check", scriptPath], { encoding: "utf8" });
-    assert.equal(result.status, 0, `Inline JavaScript ${checkedScripts + 1} must parse: ${result.stderr || result.stdout}`);
+    assert.equal(result.status, 0, "Inline JavaScript " + (checkedScripts + 1) + " must parse: " + (result.stderr || result.stdout));
     checkedScripts++;
   }
   assert.ok(checkedScripts > 0, "At least one executable inline script must be checked");
@@ -70,4 +70,4 @@ try {
   rmSync(tempDir, { recursive: true, force: true });
 }
 
-console.log(`VILANOVA SITE VALIDATION PASSED — ${expectedSections.length} sections, ${assetPaths.length} local assets, unique IDs, internal links, footer/contact policy, AI module honesty, reduced motion, keyboard focus and inline JavaScript syntax.`);
+console.log("VILANOVA SITE VALIDATION PASSED — " + expectedSections.length + " sections, " + assetPaths.length + " local assets, unique IDs, internal links, footer/contact policy, AI module honesty, reduced motion, keyboard focus and inline JavaScript syntax.");
