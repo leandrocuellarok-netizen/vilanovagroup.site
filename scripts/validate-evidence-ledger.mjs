@@ -21,7 +21,7 @@ function hasOnlyKeys(value, allowed, path, errors) {
 }
 function isDateTime(value) {
   return typeof value === "string" &&
-    /^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$/.test(value) &&
+    /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/.test(value) &&
     Number.isFinite(Date.parse(value));
 }
 function isHttpsUrl(value) {
@@ -94,6 +94,12 @@ export function validateEvent(event, index = 0) {
       if (isDateTime(event.metric.window_start) && isDateTime(event.metric.window_end) &&
           Date.parse(event.metric.window_end) <= Date.parse(event.metric.window_start))
         errors.push(path + ".metric.window_end must be later than window_start");
+      if (event.event_type === "platform_metric" && isObject(event.observation_window) &&
+          isDateTime(event.metric.window_start) && isDateTime(event.metric.window_end) &&
+          isDateTime(event.observation_window.start) && isDateTime(event.observation_window.end) &&
+          (Date.parse(event.metric.window_start) !== Date.parse(event.observation_window.start) ||
+           Date.parse(event.metric.window_end) !== Date.parse(event.observation_window.end)))
+        errors.push(path + ".metric window must match the declared observation_window");
     }
   }
 
