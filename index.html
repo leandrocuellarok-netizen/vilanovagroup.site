@@ -44,7 +44,7 @@ footer{padding:35px 4vw 28px;border-top:1px solid var(--line);display:grid;grid-
 @media(hover:none),(pointer:coarse){body,a{cursor:auto}#cursor{display:none}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
 </style>
-<script>document.documentElement.classList.add('js-ready');</script>
+
 </head>
 <body>
 <a class="skip-link" href="#main-content">SKIP TO CONTENT</a>
@@ -87,7 +87,9 @@ document.querySelectorAll('main section[id]').forEach(section=>sectionObserver.o
 
 if(finePointer){addEventListener('pointermove',e=>{root.style.setProperty('--x',e.clientX+'px');root.style.setProperty('--y',e.clientY+'px')},{passive:true})}
 document.querySelectorAll('a,.row,.eco-image,.intel-visual').forEach(el=>{el.addEventListener('mouseenter',()=>document.body.classList.add('hovering'));el.addEventListener('mouseleave',()=>document.body.classList.remove('hovering'))});
-const io=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target)}}),{threshold:.12});document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+const revealItems=[...document.querySelectorAll('.reveal')];
+if('IntersectionObserver' in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches){const revealObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible');revealObserver.unobserve(entry.target)}}),{threshold:.12});revealItems.forEach(el=>revealObserver.observe(el))}else{revealItems.forEach(el=>el.classList.add('visible'))}
+document.documentElement.classList.add('js-ready');
 if(!matchMedia('(prefers-reduced-motion: reduce)').matches){addEventListener('scroll',()=>{const y=scrollY;document.querySelectorAll('.hero-copy').forEach(el=>{el.style.transform='translate3d(0,'+(y*.16)+'px,0)'});},{passive:true})}
 if(finePointer&&!matchMedia('(prefers-reduced-motion: reduce)').matches){document.querySelectorAll('.eco-image img,.intel-visual img').forEach(img=>{img.parentElement.addEventListener('pointermove',e=>{const r=img.parentElement.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;img.style.transform='scale(1.08) translate3d('+(-x*18)+'px,'+(-y*18)+'px,0)'},{passive:true});img.parentElement.addEventListener('pointerleave',()=>img.style.transform='')})}
 </script>
