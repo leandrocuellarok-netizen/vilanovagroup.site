@@ -59,7 +59,7 @@ footer{padding:35px 4vw 28px;border-top:1px solid var(--line);display:grid;grid-
 </div>
 <div class="ticker"><span>OBSERVE / QUESTION / CONNECT / BUILD / EVOLVE / OBSERVE / QUESTION / CONNECT / BUILD / EVOLVE / </span></div>
 <section id="ecosystem" aria-labelledby="ecosystem-heading"><div class="section-head reveal"><div><div class="micro">01 / THE ECOSYSTEM</div><h2 id="ecosystem-heading">A system.<br>Not a structure.</h2></div><div class="num">[ 001 — 005 ]</div></div><div class="eco-grid"><div class="eco-image reveal"><img src="/assets/specimen-plate.svg" alt="Archival study of a synthetic human face, surrounded by measurement rings and technical annotations" loading="lazy" decoding="async"></div><div class="eco-text reveal"><span class="micro">A living network of possibilities</span>Vilanova Group is an independent ecosystem founded by <em>Leandro A. Cuellar</em>. It brings together ventures, intelligence and strategic relationships under one evolving vision. <br><br>Not limited by a single industry. Defined by the connections it creates, the questions it asks and the things it brings into existence.</div></div><figure class="archive-plate reveal"><img src="/assets/experimental-rig.svg" alt="Original archival-style illustration of a human head held within a mechanical measurement frame" loading="lazy" decoding="async"><figcaption><span>ARCHIVE / 002 — MECHANICAL INTERFACE STUDY</span><span>RECONSTRUCTED PLATE / VG—002</span></figcaption></figure></section>
-<section id="ventures" class="ventures" aria-labelledby="ventures-heading"><div class="section-head reveal"><div><div class="micro">02 / VENTURES</div><h2 id="ventures-heading">Ideas become<br>realities.</h2></div><div class="num">[ FIELD NOTES ]</div></div><div class="micro" style="margin:-42px 0 24px">HORIZONTAL FIELD INDEX / SCROLL TO EXPLORE →</div><p class="sr-only" id="venture-scroll-help">This horizontal index is keyboard accessible. Focus the region and use the left and right arrow keys to explore the categories.</p><div class="list" role="region" aria-label="Venture categories" aria-describedby="venture-scroll-help" aria-keyshortcuts="ArrowLeft ArrowRight Home End" tabindex="0"><a class="row reveal" href="#contact"><span class="idx">01</span><h3>Initiatives</h3><span class="kind">AREA / 01</span><span class="arrow" aria-hidden="true">↗</span></a><a class="row reveal" href="#contact"><span class="idx">02</span><h3>Projects</h3><span class="kind">AREA / 02</span><span class="arrow" aria-hidden="true">↗</span></a><a class="row reveal" href="#contact"><span class="idx">03</span><h3>New ventures</h3><span class="kind">AREA / 03</span><span class="arrow" aria-hidden="true">↗</span></a></div></section>
+<section id="ventures" class="ventures" aria-labelledby="ventures-heading"><div class="section-head reveal"><div><div class="micro">02 / VENTURES</div><h2 id="ventures-heading">Ideas become<br>realities.</h2></div><div class="num">[ FIELD NOTES ]</div></div><div class="micro" style="margin:-42px 0 24px">HORIZONTAL FIELD INDEX / SCROLL TO EXPLORE →</div><p class="sr-only" id="venture-scroll-help">Focus this region and use the arrow keys to scroll by panel. Focus a card to move between cards with the left and right arrows; use Home or End to reach the first or last card.</p><div class="list" role="region" aria-label="Venture categories" aria-describedby="venture-scroll-help" aria-keyshortcuts="ArrowLeft ArrowRight Home End" tabindex="0"><a class="row reveal" href="#contact"><span class="idx">01</span><h3>Initiatives</h3><span class="kind">AREA / 01</span><span class="arrow" aria-hidden="true">↗</span></a><a class="row reveal" href="#contact"><span class="idx">02</span><h3>Projects</h3><span class="kind">AREA / 02</span><span class="arrow" aria-hidden="true">↗</span></a><a class="row reveal" href="#contact"><span class="idx">03</span><h3>New ventures</h3><span class="kind">AREA / 03</span><span class="arrow" aria-hidden="true">↗</span></a></div></section>
 <section id="intelligence" class="intel" aria-labelledby="intelligence-heading"><div class="section-head reveal"><div><div class="micro">03 / INTELLIGENCE</div><h2 id="intelligence-heading">Look closer.<br>Think further.</h2></div><div class="num">[ SIGNAL / NOISE ]</div></div><div class="intel-visual reveal"><img src="/assets/signal-anatomy.svg" alt="Technical diagram of a branching artificial neural network" loading="lazy" decoding="async"><div class="intel-caption">RESEARCH / TECHNOLOGY / INNOVATION — CONTINUOUS EXPLORATION</div></div></section>
 <section id="network" aria-labelledby="network-heading"><div class="section-head reveal"><div><div class="micro">04 / NETWORK</div><h2 id="network-heading">Proximity creates<br>possibility.</h2></div><div class="num">[ HUMAN SYSTEMS ]</div></div><div class="network-grid"><article class="reveal"><span class="micro">01 / EXCHANGE</span><h3>Strategic alliances</h3><p>Building meaningful relationships across disciplines, markets and geographies.</p></article><article class="reveal"><span class="micro">02 / CONNECTION</span><h3>People & ideas</h3><p>Bringing different perspectives into the same room to reveal unexpected paths.</p></article><article class="reveal"><span class="micro">03 / EXPANSION</span><h3>Open networks</h3><p>Creating the conditions for collaboration, shared value and new opportunities.</p></article></div></section>
 <section id="contact" class="contact" aria-labelledby="contact-heading"><div class="micro reveal">05 / CONTACT — TRANSMISSION OPEN</div><div class="reveal"><h2 id="contact-heading">MAKE<br>CONTACT<span>.</span></h2><span class="contact-link" role="status">CONTACT CHANNEL — DETAILS TO BE CONFIRMED</span><div class="contact-actions"><button class="contact-copy" id="copy-inquiry" type="button">COPY INQUIRY BRIEF ↗</button><span class="micro">PREPARE A MESSAGE / NO CONTACT DETAILS REQUIRED</span></div><p class="contact-feedback" id="contact-feedback" aria-live="polite"></p><details class="inquiry-template" id="inquiry-template"><summary>VIEW MESSAGE TEMPLATE</summary><pre id="inquiry-text">Hello Vilanova Group,
@@ -79,9 +79,27 @@ const root=document.documentElement,cursor=document.getElementById('cursor');con
 const ventureIndex=document.querySelector('.list');
 const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)');
 ventureIndex?.addEventListener('keydown',event=>{
- if(event.target!==ventureIndex)return;
- const distance=Math.max(240,Math.round(ventureIndex.clientWidth*.82));
+ const cards=[...ventureIndex.querySelectorAll('.row')];
+ const focusedCard=event.target.closest?.('.row');
+ if(event.target!==ventureIndex&&!ventureIndex.contains(focusedCard))return;
  const motion=reducedMotion.matches?'auto':'smooth';
+ if(focusedCard){
+  const current=cards.indexOf(focusedCard);
+  if(current<0)return;
+  let next=current;
+  if(event.key==='ArrowRight')next=Math.min(cards.length-1,current+1);
+  else if(event.key==='ArrowLeft')next=Math.max(0,current-1);
+  else if(event.key==='Home')next=0;
+  else if(event.key==='End')next=cards.length-1;
+  else return;
+  event.preventDefault();
+  if(next!==current){
+   cards[next].focus({preventScroll:true});
+   cards[next].scrollIntoView({behavior:motion,block:'nearest',inline:'center'});
+  }
+  return;
+ }
+ const distance=Math.max(240,Math.round(ventureIndex.clientWidth*.82));
  if(event.key==='ArrowRight'){event.preventDefault();ventureIndex.scrollBy({left:distance,behavior:motion})}
  else if(event.key==='ArrowLeft'){event.preventDefault();ventureIndex.scrollBy({left:-distance,behavior:motion})}
  else if(event.key==='Home'){event.preventDefault();ventureIndex.scrollTo({left:0,behavior:motion})}
