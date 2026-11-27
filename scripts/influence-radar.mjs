@@ -13,9 +13,13 @@ function momentum(events){
  for(const e of events){if(e.event_type!=="platform_metric")continue;const k=metricKey(e);if(!groups.has(k))groups.set(k,[]);groups.get(k).push(e)}
  const out=[];
  for(const list of groups.values()){
-  list.sort((a,b)=>ts(a.observation_window.end)-ts(b.observation_window.end));
-  if(list.length<2)continue;
-  const prev=list[list.length-2],cur=list[list.length-1];
+  const byWindow=new Map();
+  for(const item of list){const end=item.observation_window.end;if(!byWindow.has(end))byWindow.set(end,[]);byWindow.get(end).push(item)}
+  // Multiple conflicting observations for one window are ambiguous; do not select one arbitrarily.
+  const unambiguous=[...byWindow.values()].filter(items=>items.length===1).map(items=>items[0]);
+  unambiguous.sort((a,b)=>ts(a.observation_window.end)-ts(b.observation_window.end));
+  if(unambiguous.length<2)continue;
+  const prev=unambiguous[unambiguous.length-2],cur=unambiguous[unambiguous.length-1];
   const pd=ts(prev.observation_window.end)-ts(prev.observation_window.start),cd=ts(cur.observation_window.end)-ts(cur.observation_window.start);
   if(Math.abs(pd-cd)>TOLERANCE)continue;
   const delta=cur.metric.value-prev.metric.value,base=prev.metric.value;
