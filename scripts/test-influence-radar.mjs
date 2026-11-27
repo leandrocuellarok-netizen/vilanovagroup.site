@@ -32,6 +32,17 @@ assert.equal(s.entities[0].momentum.length,1);assert.equal(s.entities[0].momentu
 assert.equal(s.exclusions.duplicate_source_event,1);assert.equal(s.exclusions.not_verified,2);assert.equal(s.exclusions.low_confidence,1);assert.equal(s.exclusions.outside_observation_window,2);assert.equal(s.exclusions.missing_event_timestamp,1);assert.equal(s.exclusions.non_person_entity,1);
 const zero=buildRadarSnapshot({schema_version:"1.0.0",events:[metric({id:"zero-previous",value:0,startHoursAgo:47,endHoursAgo:23,capturedHoursAgo:22}),metric({id:"zero-current",value:20,startHoursAgo:26,endHoursAgo:2,capturedHoursAgo:1})]},{now});
 assert.equal(zero.entities[0].momentum[0].percent_change,null);
+const ambiguous=buildRadarSnapshot({schema_version:"1.0.0",events:[
+ metric({id:"ambiguous-previous",value:100,startHoursAgo:47,endHoursAgo:23,capturedHoursAgo:22}),
+ metric({id:"ambiguous-current-a",value:150,startHoursAgo:26,endHoursAgo:2,capturedHoursAgo:1}),
+ metric({id:"ambiguous-current-b",value:155,startHoursAgo:26,endHoursAgo:2,capturedHoursAgo:1})
+]},{now});
+assert.equal(ambiguous.entities[0].momentum,null,"Conflicting values for the same observation window must not create false momentum");
+const unequalWindows=buildRadarSnapshot({schema_version:"1.0.0",events:[
+ metric({id:"unequal-previous",value:100,startHoursAgo:48,endHoursAgo:23,capturedHoursAgo:22}),
+ metric({id:"unequal-current",value:150,startHoursAgo:26,endHoursAgo:2,capturedHoursAgo:1})
+]},{now});
+assert.equal(unequalWindows.entities[0].momentum,null,"Different observation-window durations must not be compared");
 assert.throws(()=>buildRadarSnapshot({schema_version:"1.0.0",events:[{event_id:"broken"}]},{now}),/Invalid evidence ledger/);
 assert.throws(()=>buildRadarSnapshot({schema_version:"1.0.0",events:[]},{now,windowHours:0}),/windowHours/);
 console.log("INFLUENCE RADAR TESTS PASSED — 24-hour filtering, verified-only evidence, confidence gates, source deduplication, comparable metric momentum, unknown values, zero-baseline handling and no composite leaderboard.");
