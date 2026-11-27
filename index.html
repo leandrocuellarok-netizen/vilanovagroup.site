@@ -38,10 +38,9 @@ section{padding:140px 4vw;position:relative;border-top:1px solid var(--line)}.se
 .ventures{padding-top:100px}.list{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(280px,34vw);gap:0;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:var(--acid) var(--line);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding-bottom:10px}.list::-webkit-scrollbar{height:4px}.list::-webkit-scrollbar-track{background:var(--line)}.list::-webkit-scrollbar-thumb{background:var(--acid)}.row{display:grid;grid-template-columns:1fr auto;grid-template-rows:auto 1fr auto;gap:18px;align-items:start;min-height:280px;padding:26px 24px 22px 0;border-right:1px solid var(--line);scroll-snap-align:start;transition:padding .35s,color .35s}.row+.row{padding-left:24px}.row:hover{padding-top:32px;color:var(--acid)}.row .idx,.row .kind{font:10px var(--mono);color:var(--muted)}.row h3{grid-column:1/-1;align-self:end;font-size:clamp(28px,4vw,56px);font-weight:400;letter-spacing:-.06em;margin:0}.row .kind{grid-column:1;align-self:end}.row .arrow{grid-column:2;grid-row:3;font-size:24px;text-align:right}
 .intel{background:#d5d2c8;color:#10100f;overflow:hidden}.intel .section-head .num,.intel .micro{color:#64635d}.intel .section-head{position:relative;z-index:2}.intel-visual{height:65vh;min-height:430px;position:relative;background:#111;overflow:hidden}.intel-visual img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.2);opacity:.82;transform:scale(1.04);transition:transform 1s}.intel-visual:hover img{transform:scale(1.1)}.intel-caption{position:absolute;left:30px;bottom:25px;font:10px var(--mono);letter-spacing:.16em;color:white}
 .network-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}.network-grid article{background:var(--bg);padding:35px;min-height:240px}.network-grid h3{font-size:25px;font-weight:400;letter-spacing:-.05em}.network-grid p{font-size:13px;line-height:1.7;color:#888}.network-grid .micro{color:var(--acid)}
-.contact{min-height:75vh;display:flex;flex-direction:column;justify-content:space-between}.contact h2{font-size:clamp(60px,12vw,170px);line-height:.8;letter-spacing:-.1em;font-weight:500;margin:40px 0}.contact h2 span{color:var(--acid)}.contact-link{font:12px var(--mono);letter-spacing:.14em;border-bottom:1px solid var(--acid);padding-bottom:12px;display:inline-block}.contact-actions{display:flex;align-items:center;flex-wrap:wrap;gap:24px;margin-top:30px}.contact-copy{appearance:none;border:1px solid var(--acid);background:transparent;color:var(--paper);padding:14px 18px;font:10px var(--mono);letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:background .2s,color .2s}.contact-copy:hover{background:var(--acid);color:#090909}.contact-feedback{min-height:1.5em;margin:16px 0 0;color:var(--muted);font:10px var(--mono);letter-spacing:.08em}.inquiry-template{margin-top:22px;max-width:620px;border-top:1px solid var(--line);padding-top:16px}.inquiry-template summary{cursor:pointer;color:var(--acid);font:10px var(--mono);letter-spacing:.13em}.inquiry-template pre{white-space:pre-wrap;overflow-wrap:anywhere;color:#aaa;font:12px/1.6 var(--mono)}
-footer{padding:35px 4vw 28px;border-top:1px solid var(--line);display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;color:#777;font:9px var(--mono);letter-spacing:.12em}footer .verse{text-align:center;color:#c9c6bc;font:italic 12px var(--sans);letter-spacing:0}footer .credit{text-align:right}
+.contact{min-height:75vh;display:flex;flex-direction:column;justify-content:space-between}.contact h2{font-size:clamp(60px,12vw,170px);line-height:.8;letter-spacing:-.1em;font-weight:500;margin:40px 0}.contact h2 span{color:var(--acid)}.contact-intro{max-width:600px;margin:0 0 24px;color:#aaa;font-size:15px;line-height:1.7}.contact-link{font:10px var(--mono);letter-spacing:.14em;border-bottom:1px solid var(--acid);padding-bottom:12px;display:inline-block;color:var(--acid)}.inquiry-form{max-width:760px;margin-top:34px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.inquiry-form label{display:grid;gap:9px;margin:0 0 18px;color:#aaa;font:9px var(--mono);letter-spacing:.14em}.inquiry-form label span{color:var(--muted)}.inquiry-form input,.inquiry-form select,.inquiry-form textarea{width:100%;border:1px solid var(--line);border-radius:0;background:#10100f;color:var(--paper);color-scheme:dark;padding:14px 15px;font:13px/1.5 var(--sans);letter-spacing:0}.inquiry-form input::placeholder,.inquiry-form textarea::placeholder{color:#696861}.inquiry-form textarea{min-height:130px;resize:vertical}.inquiry-form input:focus-visible,.inquiry-form select:focus-visible,.inquiry-form textarea:focus-visible{outline:2px solid var(--acid);outline-offset:3px;border-color:var(--acid)}.contact-actions{display:flex;align-items:center;flex-wrap:wrap;gap:14px;margin-top:24px}.contact-copy{appearance:none;border:1px solid var(--acid);background:transparent;color:var(--paper);padding:14px 18px;min-height:44px;font:10px var(--mono);letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:background .2s,color .2s,opacity .2s}.contact-copy:hover:not(:disabled){background:var(--acid);color:#090909}.contact-copy:disabled{opacity:.38;cursor:not-allowed}.contact-copy-secondary{border-color:var(--line)}.contact-feedback{min-height:1.5em;margin:16px 0 0;color:var(--muted);font:10px/1.6 var(--mono);letter-spacing:.06em}.inquiry-template{margin-top:22px;max-width:760px;border-top:1px solid var(--line);padding-top:16px}.inquiry-template summary{cursor:pointer;color:var(--acid);font:10px var(--mono);letter-spacing:.13em}.inquiry-template pre{white-space:pre-wrap;overflow-wrap:anywhere;color:#aaa;font:12px/1.6 var(--mono);padding:12px 0}footer{padding:35px 4vw 28px;border-top:1px solid var(--line);display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;color:#777;font:9px var(--mono);letter-spacing:.12em}footer .verse{text-align:center;color:#c9c6bc;font:italic 12px var(--sans);letter-spacing:0}footer .credit{text-align:right}
 .reveal{opacity:1;transform:none}.js-ready .reveal{opacity:0;transform:translateY(45px);transition:opacity 1s,transform 1s cubic-bezier(.2,.7,.2,1)}.js-ready .reveal.visible{opacity:1;transform:translateY(0)}.ticker{overflow:hidden;white-space:nowrap;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:17px 0;color:#888;font:10px var(--mono);letter-spacing:.2em}.ticker span{display:inline-block;animation:ticker 32s linear infinite}@keyframes ticker{to{transform:translateX(-50%)}}
-@media(max-width:760px){body,a{cursor:auto}#cursor{display:none}header{padding:14px 5vw;gap:10px;flex-wrap:wrap}.status{display:none}nav{order:3;width:100%;justify-content:space-between;gap:10px;overflow-x:auto;padding-bottom:2px}nav a{font-size:7px}.hero{padding:23vh 6vw 7vh}.hero:after{width:85vw;right:-18%;top:30%;opacity:.35}.hero h1{font-size:17vw}.hero h1 .indent{padding-left:4vw}.hero-bottom{align-items:start;gap:20px;flex-direction:column}.eco-grid{grid-template-columns:1fr}.eco-image{height:390px}.archive-plate{margin-top:42px;height:330px}.archive-plate figcaption{flex-direction:column;gap:6px}.list{grid-auto-columns:82vw}.row,.row+.row{grid-template-columns:1fr auto;grid-template-rows:auto 1fr auto;min-height:250px;padding:22px 18px 18px 0}.row+.row{padding-left:18px}.row .kind{display:block}.network-grid{grid-template-columns:1fr}.network-grid article{min-height:180px}section{padding:95px 6vw}.section-head{margin-bottom:45px}.contact-actions{align-items:flex-start;flex-direction:column;gap:18px}.contact-copy{min-height:44px}footer{grid-template-columns:1fr;text-align:left}footer .verse{text-align:left}footer .credit{text-align:left}.intel-visual{min-height:360px;height:50vh}}
+@media(max-width:760px){body,a{cursor:auto}#cursor{display:none}header{padding:14px 5vw;gap:10px;flex-wrap:wrap}.status{display:none}nav{order:3;width:100%;justify-content:space-between;gap:10px;overflow-x:auto;padding-bottom:2px}nav a{font-size:7px}.hero{padding:23vh 6vw 7vh}.hero:after{width:85vw;right:-18%;top:30%;opacity:.35}.hero h1{font-size:17vw}.hero h1 .indent{padding-left:4vw}.hero-bottom{align-items:start;gap:20px;flex-direction:column}.eco-grid{grid-template-columns:1fr}.eco-image{height:390px}.archive-plate{margin-top:42px;height:330px}.archive-plate figcaption{flex-direction:column;gap:6px}.list{grid-auto-columns:82vw}.row,.row+.row{grid-template-columns:1fr auto;grid-template-rows:auto 1fr auto;min-height:250px;padding:22px 18px 18px 0}.row+.row{padding-left:18px}.row .kind{display:block}.network-grid{grid-template-columns:1fr}.network-grid article{min-height:180px}section{padding:95px 6vw}.section-head{margin-bottom:45px}.contact-actions{align-items:flex-start;flex-direction:column;gap:18px}.form-grid{grid-template-columns:1fr}.contact-copy{min-height:44px}footer{grid-template-columns:1fr;text-align:left}footer .verse{text-align:left}footer .credit{text-align:left}.intel-visual{min-height:360px;height:50vh}}
 @media(hover:none),(pointer:coarse){body,a{cursor:auto}#cursor{display:none}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
 </style>
@@ -62,16 +61,47 @@ footer{padding:35px 4vw 28px;border-top:1px solid var(--line);display:grid;grid-
 <section id="ventures" class="ventures" aria-labelledby="ventures-heading"><div class="section-head reveal"><div><div class="micro">02 / VENTURES</div><h2 id="ventures-heading">Ideas become<br>realities.</h2></div><div class="num">[ FIELD NOTES ]</div></div><div class="micro" style="margin:-42px 0 24px">HORIZONTAL FIELD INDEX / SCROLL TO EXPLORE →</div><p class="sr-only" id="venture-scroll-help">Focus this region and use the arrow keys to scroll by panel. Focus a card to move between cards with the left and right arrows; use Home or End to reach the first or last card.</p><div class="list" role="region" aria-label="Venture categories" aria-describedby="venture-scroll-help" aria-keyshortcuts="ArrowLeft ArrowRight Home End" tabindex="0"><a class="row reveal" href="#contact"><span class="idx">01</span><h3>Initiatives</h3><span class="kind">AREA / 01</span><span class="arrow" aria-hidden="true">↗</span></a><a class="row reveal" href="#contact"><span class="idx">02</span><h3>Projects</h3><span class="kind">AREA / 02</span><span class="arrow" aria-hidden="true">↗</span></a><a class="row reveal" href="#contact"><span class="idx">03</span><h3>New ventures</h3><span class="kind">AREA / 03</span><span class="arrow" aria-hidden="true">↗</span></a></div></section>
 <section id="intelligence" class="intel" aria-labelledby="intelligence-heading"><div class="section-head reveal"><div><div class="micro">03 / INTELLIGENCE</div><h2 id="intelligence-heading">Look closer.<br>Think further.</h2></div><div class="num">[ SIGNAL / NOISE ]</div></div><div class="intel-visual reveal"><img src="/assets/signal-anatomy.svg" alt="Technical diagram of a branching artificial neural network" loading="lazy" decoding="async"><div class="intel-caption">RESEARCH / TECHNOLOGY / INNOVATION — CONTINUOUS EXPLORATION</div></div></section>
 <section id="network" aria-labelledby="network-heading"><div class="section-head reveal"><div><div class="micro">04 / NETWORK</div><h2 id="network-heading">Proximity creates<br>possibility.</h2></div><div class="num">[ HUMAN SYSTEMS ]</div></div><div class="network-grid"><article class="reveal"><span class="micro">01 / EXCHANGE</span><h3>Strategic alliances</h3><p>Building meaningful relationships across disciplines, markets and geographies.</p></article><article class="reveal"><span class="micro">02 / CONNECTION</span><h3>People & ideas</h3><p>Bringing different perspectives into the same room to reveal unexpected paths.</p></article><article class="reveal"><span class="micro">03 / EXPANSION</span><h3>Open networks</h3><p>Creating the conditions for collaboration, shared value and new opportunities.</p></article></div></section>
-<section id="contact" class="contact" aria-labelledby="contact-heading"><div class="micro reveal">05 / CONTACT — TRANSMISSION OPEN</div><div class="reveal"><h2 id="contact-heading">MAKE<br>CONTACT<span>.</span></h2><span class="contact-link" role="status">CONTACT CHANNEL — DETAILS TO BE CONFIRMED</span><div class="contact-actions"><button class="contact-copy" id="copy-inquiry" type="button">COPY INQUIRY BRIEF ↗</button><span class="micro">PREPARE A MESSAGE / NO CONTACT DETAILS REQUIRED</span></div><p class="contact-feedback" id="contact-feedback" aria-live="polite"></p><details class="inquiry-template" id="inquiry-template"><summary>VIEW MESSAGE TEMPLATE</summary><pre id="inquiry-text">Hello Vilanova Group,
-
-I would like to explore a strategic conversation.
-
-Name:
-Organization:
-Area of interest:
-Message:
-
-Thank you.</pre></details></div><div class="micro">GENERAL COORDINATION / ERICA ACOSTA</div></section>
+<section id="contact" class="contact" aria-labelledby="contact-heading">
+<div class="micro reveal">05 / CONTACT — INQUIRY PREPARATION</div>
+<div class="reveal">
+<h2 id="contact-heading">MAKE<br>CONTACT<span>.</span></h2>
+<p class="contact-intro">Start a conversation about a strategic relationship, a business opportunity or a new venture.</p>
+<span class="contact-link" role="status">CONTACT CHANNEL — NOT YET CONFIGURED</span>
+<div class="inquiry-form" id="inquiry-form" role="group" aria-labelledby="inquiry-form-heading">
+<h3 class="sr-only" id="inquiry-form-heading">Prepare an inquiry</h3>
+<div class="form-grid">
+<label for="inquiry-name">YOUR NAME
+<input id="inquiry-name" name="name" type="text" autocomplete="name" required maxlength="100" placeholder="Full name">
+</label>
+<label for="inquiry-organization">ORGANIZATION <span> / OPTIONAL</span>
+<input id="inquiry-organization" name="organization" type="text" autocomplete="organization" maxlength="120" placeholder="Company or organization">
+</label>
+</div>
+<label for="inquiry-interest">AREA OF INTEREST
+<select id="inquiry-interest" name="interest" required>
+<option value="" selected disabled>Select an inquiry type</option>
+<option value="Strategic partnership">Strategic partnership</option>
+<option value="Investment or business opportunity">Investment or business opportunity</option>
+<option value="New venture proposal">New venture proposal</option>
+<option value="General inquiry">General inquiry</option>
+</select>
+</label>
+<label for="inquiry-message">MESSAGE
+<textarea id="inquiry-message" name="message" rows="5" required maxlength="3000" placeholder="Briefly describe the opportunity or proposal."></textarea>
+</label>
+<div class="contact-actions">
+<button class="contact-copy" id="prepare-inquiry" type="button">PREPARE INQUIRY ↗</button>
+<button class="contact-copy contact-copy-secondary" id="copy-inquiry" type="button" disabled>COPY MESSAGE</button>
+</div>
+<p class="contact-feedback" id="contact-feedback" aria-live="polite">Your message is prepared locally. No information is transmitted or stored.</p>
+</div>
+<details class="inquiry-template" id="inquiry-template">
+<summary>VIEW PREPARED MESSAGE</summary>
+<pre id="inquiry-text" tabindex="0">Complete the fields above and select PREPARE INQUIRY to build your message.</pre>
+</details>
+</div>
+<div class="micro">GENERAL COORDINATION / ERICA ACOSTA</div>
+</section>
 </main>
 <footer><div>VILANOVA GROUP © 2026<br>FOUNDER / LEANDRO A. CUELLAR<br>GENERAL COORDINATION / ERICA ACOSTA</div><div class="verse">“Behold, I make all things new.”<br><span style="font:9px var(--mono);color:#777">REVELATION 21:5 — KJV</span></div><div class="credit">BUILT FOR THE UNSEEN<br>INDEPENDENT / CONNECTED</div></footer>
 <script>
@@ -105,8 +135,37 @@ ventureIndex?.addEventListener('keydown',event=>{
  else if(event.key==='Home'){event.preventDefault();ventureIndex.scrollTo({left:0,behavior:motion})}
  else if(event.key==='End'){event.preventDefault();ventureIndex.scrollTo({left:ventureIndex.scrollWidth,behavior:motion})}
 });
-const copyButton=document.getElementById('copy-inquiry'),feedback=document.getElementById('contact-feedback'),template=document.getElementById('inquiry-template'),inquiryText=document.getElementById('inquiry-text');
-copyButton.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(inquiryText.textContent);feedback.textContent='INQUIRY BRIEF COPIED. COMPLETE IT AND SEND THROUGH YOUR PREFERRED CHANNEL.'}catch(error){template.open=true;feedback.textContent='CLIPBOARD ACCESS IS UNAVAILABLE. THE MESSAGE TEMPLATE IS OPEN BELOW FOR MANUAL COPYING.'}});
+const prepareButton=document.getElementById('prepare-inquiry'),copyButton=document.getElementById('copy-inquiry'),feedback=document.getElementById('contact-feedback'),template=document.getElementById('inquiry-template'),inquiryText=document.getElementById('inquiry-text');
+const inquiryName=document.getElementById('inquiry-name'),inquiryOrganization=document.getElementById('inquiry-organization'),inquiryInterest=document.getElementById('inquiry-interest'),inquiryMessage=document.getElementById('inquiry-message');
+let preparedInquiry=false;
+prepareButton.addEventListener('click',()=>{
+ const requiredFields=[inquiryName,inquiryInterest,inquiryMessage];
+ const invalidField=requiredFields.find(field=>!field.value.trim());
+ if(invalidField){feedback.textContent='COMPLETE YOUR NAME, AREA OF INTEREST AND MESSAGE BEFORE PREPARING THE INQUIRY.';invalidField.focus();return}
+ const lines=['Hello Vilanova Group,','','I would like to explore a conversation.','',`Name: ${inquiryName.value.trim()}`,`Organization: ${inquiryOrganization.value.trim()||'Not provided'}`,`Area of interest: ${inquiryInterest.value}`,'','Message:',inquiryMessage.value.trim(),'','Thank you.'];
+ inquiryText.textContent=lines.join('\\n');
+ template.open=true;
+ preparedInquiry=true;
+ copyButton.disabled=false;
+ feedback.textContent='MESSAGE PREPARED LOCALLY. NO MESSAGE HAS BEEN SENT OR TRANSMITTED.';
+});
+copyButton.addEventListener('click',async()=>{
+ if(!preparedInquiry){feedback.textContent='PREPARE YOUR INQUIRY BEFORE COPYING THE MESSAGE.';return}
+ try{
+  if(!navigator.clipboard?.writeText)throw new Error('Clipboard API unavailable');
+  await navigator.clipboard.writeText(inquiryText.textContent);
+  feedback.textContent='MESSAGE COPIED. SEND IT THROUGH YOUR PREFERRED CHANNEL WHEN CONTACT DETAILS ARE AVAILABLE.';
+ }catch(error){
+  template.open=true;
+  inquiryText.focus();
+  const range=document.createRange();
+  range.selectNodeContents(inquiryText);
+  const selection=window.getSelection();
+  selection.removeAllRanges();
+  selection.addRange(range);
+  feedback.textContent='AUTOMATIC COPYING IS UNAVAILABLE. THE MESSAGE IS SELECTED BELOW; USE YOUR DEVICE COPY COMMAND.';
+ }
+});
 const progress=document.getElementById('reading-progress');let progressFrame=0;
 function updateProgress(){const max=document.documentElement.scrollHeight-innerHeight;const value=max>0?Math.min(100,Math.max(0,scrollY/max*100)):0;progress.style.transform='scaleX('+(value/100)+')';progress.setAttribute('aria-valuenow',String(Math.round(value)))}
 function requestProgress(){if(!progressFrame)progressFrame=requestAnimationFrame(()=>{updateProgress();progressFrame=0})}
