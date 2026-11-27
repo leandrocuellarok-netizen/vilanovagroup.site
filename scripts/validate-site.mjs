@@ -49,6 +49,19 @@ assert.ok(!html.includes("while(count<target"), "AI Fabric must not pad word cou
 assert.ok(html.includes("prefers-reduced-motion: reduce"), "Reduced-motion support must remain in place");
 assert.ok(html.includes("focus-visible"), "Visible keyboard focus styles must remain in place");
 
+const evidenceSchemaPath = resolve(root, "schemas/evidence-event.schema.json");
+const evidenceLedgerPath = resolve(root, "data/evidence-events.json");
+assert.ok(existsSync(evidenceSchemaPath), "The evidence-event JSON Schema must exist");
+assert.ok(existsSync(evidenceLedgerPath), "The evidence ledger must exist");
+const evidenceSchema = JSON.parse(readFileSync(evidenceSchemaPath, "utf8"));
+const evidenceLedger = JSON.parse(readFileSync(evidenceLedgerPath, "utf8"));
+assert.equal(evidenceSchema.$schema, "https://json-schema.org/draft/2020-12/schema", "Evidence schema must declare JSON Schema 2020-12");
+assert.equal(evidenceLedger.schema_version, "1.0.0", "Evidence ledger version must be explicit");
+assert.ok(Array.isArray(evidenceLedger.events), "Evidence ledger events must be an array");
+assert.ok(existsSync(resolve(root, "scripts/validate-evidence-ledger.mjs")), "Evidence validator must exist");
+assert.ok(existsSync(resolve(root, "scripts/test-evidence-ledger.mjs")), "Evidence regression tests must exist");
+assert.ok(html.includes('href="/docs/EVIDENCE-LEDGER.md"'), "The public site must link to its evidence protocol");
+
 const assetPaths = [...new Set([...html.matchAll(/(?:src|href)="(\/assets\/[^"]+)"/g)].map(([, path]) => path))];
 for (const asset of assetPaths) {
   assert.ok(existsSync(resolve(root, "." + asset)), "Referenced asset must exist: " + asset);
