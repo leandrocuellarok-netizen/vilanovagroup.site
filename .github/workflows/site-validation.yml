@@ -32,3 +32,7 @@ jobs:
         run: node scripts/validate-evidence-ledger.mjs
       - name: Run evidence ledger regression tests
         run: node scripts/test-evidence-ledger.mjs
+      - name: Build 24-hour Influence Radar evidence snapshot
+        run: node scripts/influence-radar.mjs
+      - name: Run Influence Radar aggregation regression tests
+        run: node scripts/test-influence-radar.mjs
