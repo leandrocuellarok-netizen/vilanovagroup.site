@@ -34,7 +34,7 @@ for (const [type, expectedWorkstreams, expectedHeading] of cases) {
     assert.ok(prompt.includes("never repeat paragraphs or pad length"), "The production handoff must prohibit artificial padding");
 
     const workstreamParagraphs = prompt.split(/\n\s*\n/)
-      .filter(block => /^\d{2} — /.test(block))
+      .filter(block => /^\d{2} — \d{2} \/ /.test(block))
       .map(block => block.split("\n").slice(1).join("\n").trim());
     assert.equal(workstreamParagraphs.length, expectedWorkstreams, type + " must produce the expected number of specialist workstreams");
     assert.equal(new Set(workstreamParagraphs).size, workstreamParagraphs.length, type + " must not repeat generic workstream instructions");
