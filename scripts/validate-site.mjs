@@ -225,4 +225,24 @@ try {
   rmSync(tempDir, { recursive: true, force: true });
 }
 
+
+const mediaOwnershipRegistryPath = resolve(root, "data/argentina-media-ownership.json");
+const mediaOwnershipSchemaPath = resolve(root, "schemas/media-ownership-registry.schema.json");
+const mediaOwnershipDocsPath = resolve(root, "docs/ARGENTINA-MEDIA-OWNERSHIP-REGISTER-2026-11-28.md");
+const mediaOwnershipValidatorPath = resolve(root, "scripts/validate-media-ownership-registry.mjs");
+const mediaOwnershipTestsPath = resolve(root, "scripts/test-media-ownership-registry.mjs");
+assert.ok(existsSync(mediaOwnershipRegistryPath), "Argentina media ownership claim register must exist");
+assert.ok(existsSync(mediaOwnershipSchemaPath), "Media ownership registry schema must exist");
+assert.ok(existsSync(mediaOwnershipDocsPath), "Dated media ownership research report must exist");
+assert.ok(existsSync(mediaOwnershipValidatorPath) && existsSync(mediaOwnershipTestsPath), "Media ownership validation and regression tests must exist");
+const mediaOwnershipRegistry = JSON.parse(readFileSync(mediaOwnershipRegistryPath, "utf8"));
+const mediaOwnershipSchema = JSON.parse(readFileSync(mediaOwnershipSchemaPath, "utf8"));
+assert.equal(mediaOwnershipSchema.$schema, "https://json-schema.org/draft/2020-12/schema", "Media ownership schema must declare JSON Schema 2020-12");
+assert.equal(mediaOwnershipRegistry.registry_id, "argentina-media-ownership", "Media ownership registry ID must be explicit");
+assert.ok(mediaOwnershipRegistry.claims.some(claim => claim.status === "disputed"), "Conflicting ownership claims must remain visible");
+assert.ok(mediaOwnershipRegistry.entities.find(entity => entity.entity_id === "telefe")?.ownership_status === "unresolved", "Telefe current ownership must remain unresolved until primary reconciliation");
+assert.ok(mediaOwnershipRegistry.entities.find(entity => entity.entity_id === "gelatina")?.ownership_status === "unresolved", "Gelatina ownership must not be inferred");
+assert.ok(html.includes('href="https://github.com/leandrocuellarok-netizen/vilanovagroup.site/blob/main/docs/ARGENTINA-MEDIA-OWNERSHIP-REGISTER-2026-11-28.md"'), "VILANOVA AI MEDIA must link to the dated ownership claim register");
+assert.ok(workflow.includes("node scripts/validate-media-ownership-registry.mjs") && workflow.includes("node scripts/test-media-ownership-registry.mjs"), "Media ownership validation and tests must run in CI");
+
 console.log("VILANOVA SITE VALIDATION PASSED — " + expectedSections.length + " sections, " + assetPaths.length + " local assets, unique IDs, internal links, footer/contact policy, AI module honesty, commercial intelligence pipeline, provider permissions and eligibility, reduced motion, keyboard focus and inline JavaScript syntax.");

@@ -1,0 +1,294 @@
+{
+  "schema_version": "1.0.0",
+  "registry_id": "argentina-media-ownership",
+  "jurisdiction": "AR",
+  "reviewed_at": "2026-11-28T09:00:00-03:00",
+  "coverage_note": "First-edition research sample, not an exhaustive census of Argentine media. Ownership, corporate control, board governance and editorial positioning are separate fields of inquiry. A missing or unresolved ownership record must not be interpreted as proof that no owner exists.",
+  "methodology": [
+    "Prefer corporate disclosures, official filings and transaction counsel notices for confirmed claims.",
+    "Label press-reported transactions and shareholding percentages as reported, not primary-source confirmed.",
+    "Keep historical research snapshots separate from current ownership.",
+    "A board appointment does not establish shareholding or ultimate beneficial ownership.",
+    "Do not infer editorial or political affiliation from ownership, guests, presenters, coverage, endorsements or programme content.",
+    "Where dated sources conflict, retain the conflict and leave current ownership unresolved until primary documentation is available."
+  ],
+  "entities": [
+    {
+      "entity_id": "grupo-clarin",
+      "display_name": "Grupo Clarín S.A.",
+      "entity_type": "media_group",
+      "official_url": "https://ir.grupoclarin.com/",
+      "ownership_status": "documented",
+      "current_status_note": "The corporate structure page identifies four controlling families and states that 20% of share capital is listed. It does not disclose each family's individual percentage."
+    },
+    {
+      "entity_id": "grupo-america",
+      "display_name": "Grupo América",
+      "entity_type": "media_group",
+      "official_url": "https://grupoamerica.com.ar/",
+      "ownership_status": "reported_only",
+      "current_status_note": "A 2026 press report describes a 40/40/15/5 shareholding split. No primary shareholder register was reviewed in this edition."
+    },
+    {
+      "entity_id": "america-tv-sa",
+      "display_name": "América TV S.A.",
+      "entity_type": "company",
+      "official_url": "https://www.americatv.com.ar/",
+      "ownership_status": "partial",
+      "current_status_note": "A June 2026 Official Gazette notice documents board appointments made at the 21 May 2026 shareholders' meeting; this is governance evidence, not a cap table."
+    },
+    {
+      "entity_id": "telefe",
+      "display_name": "Telefe / Televisión Federal S.A.",
+      "entity_type": "outlet",
+      "official_url": "https://telefe.com/",
+      "ownership_status": "unresolved",
+      "current_status_note": "A sale to a Scaglione-led holding company was confirmed as completed in October 2025. A later 2026 report describes a further Paramount sale with inconsistent indexed buyer details. Current ultimate ownership is not independently reconfirmed."
+    },
+    {
+      "entity_id": "blender",
+      "display_name": "Blender",
+      "entity_type": "outlet",
+      "official_url": null,
+      "ownership_status": "disputed",
+      "current_status_note": "2025 reporting describes Marini/CaleGroup as holding or acquiring control, but accounts differ on the transaction stage and remaining shareholding. No primary cap table was reviewed."
+    },
+    {
+      "entity_id": "carajo",
+      "display_name": "Carajo",
+      "entity_type": "outlet",
+      "official_url": null,
+      "ownership_status": "disputed",
+      "current_status_note": "2025 reporting describes Marini/CaleGroup as increasing control or acquiring the outlet, while another report describes Daniel Parisini as retaining the remaining stake. No primary cap table was reviewed."
+    },
+    {
+      "entity_id": "la-nacion",
+      "display_name": "La Nación / S.A. La Nación",
+      "entity_type": "media_group",
+      "official_url": "https://www.lanacion.com.ar/",
+      "ownership_status": "historical_only",
+      "current_status_note": "The available Media Ownership Monitor page is explicitly a 2018 snapshot. Its ownership figures are retained only as historical context and are not presented as current."
+    },
+    {
+      "entity_id": "gelatina",
+      "display_name": "Gelatina",
+      "entity_type": "outlet",
+      "official_url": "https://gelatina.com.ar/",
+      "ownership_status": "unresolved",
+      "current_status_note": "This edition did not establish a legal owner from a primary corporate filing. Do not infer ownership from founders, presenters, guests or political content."
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "src-clarin-structure",
+      "publisher": "Grupo Clarín — Investor Relations",
+      "title": "Estructura societaria",
+      "url": "https://ir.grupoclarin.com/estructura-societaria/",
+      "source_type": "official_corporate_disclosure",
+      "published_at": null,
+      "accessed_at": "2026-11-28T09:00:00-03:00",
+      "access_note": "Corporate structure page retrieved during this review; no publication date is displayed on the page."
+    },
+    {
+      "source_id": "src-america-gazette-2026",
+      "publisher": "Boletín Oficial de la República Argentina",
+      "title": "America TV S.A. — board appointment notice",
+      "url": "https://otslist.boletinoficial.gob.ar/ots/download/589f5b391056fe98a649251a15e45bf2e38a5e267e6eb34b866885d3b146b38c/0/",
+      "source_type": "official_public_filing",
+      "published_at": "2026-06-10",
+      "accessed_at": "2026-11-28T09:00:00-03:00",
+      "access_note": "Official Gazette notice states that the appointments follow the shareholders' meeting and board distribution of roles dated 21 May 2026."
+    },
+    {
+      "source_id": "src-america-cap-table-2026",
+      "publisher": "Somos Pymes",
+      "title": "El dueño de Swiss Medical adquirió un 40% del grupo América",
+      "url": "https://www.somospymes.com.ar/item/20941-el-dueno-de-swiss-medical-adquirio-un-40-del-grupo-america.html",
+      "source_type": "news_report",
+      "published_at": "2026-10-22",
+      "accessed_at": "2026-11-28T09:00:00-03:00",
+      "access_note": "Secondary report. It states a 40% Vila-Manzano / 40% Belocopitt / 15% Eurnekian / 5% Nofal composition; no primary shareholder register was reviewed."
+    },
+    {
+      "source_id": "src-telefe-sale-2025",
+      "publisher": "Arnold & Porter",
+      "title": "Arnold & Porter Represents Paramount in Sale of Argentine Telefe",
+      "url": "https://www.arnoldporter.com/en/perspectives/news/2025/11/arnold-porter-represents-paramount-in-sale-of-argentine-telefe",
+      "source_type": "transaction_counsel_notice",
+      "published_at": "2025-11-05",
+      "accessed_at": "2026-11-28T09:00:00-03:00",
+      "access_note": "Transaction counsel for Paramount states that the sale to a holding company led by Gustavo Scaglione completed on 23 October 2025."
+    },
+    {
+      "source_id": "src-telefe-lpo-2026",
+      "publisher": "La Política Online",
+      "title": "Manzano, Vila, Scaglione y Santa María se quedaron con Telefé",
+      "url": "https://www.lapoliticaonline.com/politica/manzano-vila-scaglione-y-santa-maria-se-quedaron-con-telefe-4781/",
+      "source_type": "news_report",
+      "published_at": "2026-08-04",
+      "accessed_at": "2026-11-28T09:00:00-03:00",
+      "access_note": "The article body returned HTTP 403 during review. The indexed headline and excerpt contain inconsistent buyer details. Retained only as a disputed lead, not as proof of current ownership."
+    },
+    {
+      "source_id": "src-blender-carajo-cronista-2025",
+      "publisher": "El Cronista",
+      "title": "Augusto Marini incrementa su participación accionaria en los canales Blender y Carajo",
+      "url": "https://www.cronista.com/informacion-gral/augusto-marini-incrementa-su-participacion-accionaria-en-los-canales-blender-y-carajo/",
+      "source_type": "news_report",
+      "published_at": "2025-05-21",
+      "accessed_at": "2026-11-28T09:00:00-03:00",
+      "access_note": "Reports an expected increase in Marini/CaleGroup participation; describes Marini as majority shareholder in Blender and strategic partner in Carajo, with Iván Liska and Daniel Parisini retaining remaining participation respectively."
+    },
+    {
+      "source_id": "src-blender-carajo-letrae-2025",
+      "publisher": "Letra E",
+      "title": "El negocio del streaming en la Argentina de Javier Milei: crece, repite esquemas y espera monetizarse",
+      "url": "https://www.letrap.com.ar/letrae/economia-finanzas/el-negocio-del-streaming-la-argentina-javier-milei-crece-repite-esquemas-y-esperamonetizarse-n5416178/amp",
+      "source_type": "news_report",
+      "published_at": "2025-05-28",
+      "accessed_at": "2026-11-28T09:00:00-03:00",
+      "access_note": "Reports that Augusto Marini/CaleGroup acquired 100% of Blender and Carajo. This conflicts with other reporting on the remaining stakes; no primary cap table was reviewed."
+    },
+    {
+      "source_id": "src-lanacion-mom-2018",
+      "publisher": "Media Ownership Monitor Argentina / Global Media Registry",
+      "title": "Grupo La Nación — Media Ownership Monitor Argentina 2018",
+      "url": "https://argentina.mom-gmr.org/en/owners/companies/detail/company//grupo-la-nacion/",
+      "source_type": "research_database",
+      "published_at": null,
+      "accessed_at": "2026-11-28T09:00:00-03:00",
+      "access_note": "The page identifies itself as the 2018 Media Ownership Monitor snapshot. Exact observation date is not specified; use only as historical context."
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "clarin-controlling-families",
+      "subject_entity_id": "grupo-clarin",
+      "claim_kind": "control",
+      "predicate": "controlled_by",
+      "object_label": "Noble Herrera, Magnetto, Pagliaro and Aranda families",
+      "claim_text": "Grupo Clarín's corporate structure page identifies the Noble Herrera, Magnetto, Pagliaro and Aranda families as controlling shareholders. The same page states that 20% of the company's share capital is listed on the Buenos Aires Stock Exchange.",
+      "status": "primary_source_confirmed",
+      "as_of": null,
+      "confidence": "high",
+      "source_ids": [
+        "src-clarin-structure"
+      ],
+      "caveat": "The cited page does not disclose the individual percentage held by each controlling family."
+    },
+    {
+      "claim_id": "america-tv-board-2026",
+      "subject_entity_id": "america-tv-sa",
+      "claim_kind": "governance",
+      "predicate": "board_composition",
+      "object_label": "Board appointed following the 21 May 2026 shareholders' meeting",
+      "claim_text": "The Official Gazette notice names Daniel Eduardo Vila as President, Claudio Fernando Belocopitt as Vice President, and José Luis Manzano among the directors of America TV S.A.",
+      "status": "primary_source_confirmed",
+      "as_of": "2026-05-21",
+      "confidence": "high",
+      "source_ids": [
+        "src-america-gazette-2026"
+      ],
+      "caveat": "The notice documents board appointments, not shareholding percentages or ultimate beneficial ownership.",
+      "inference_guard": "Board appointments do not establish shareholding percentages or ultimate ownership."
+    },
+    {
+      "claim_id": "america-reported-cap-table-2026",
+      "subject_entity_id": "grupo-america",
+      "claim_kind": "ownership",
+      "predicate": "reported_shareholding",
+      "object_label": "Vila-Manzano group 40%; Claudio Belocopitt 40%; Eurnekian 15%; Nofal 5%",
+      "claim_text": "Somos Pymes reported this shareholding composition on 22 October 2026. The figures are retained as a secondary-source report and have not been confirmed against a primary shareholder register in this edition.",
+      "status": "reported_not_primary_confirmed",
+      "as_of": "2026-10-22",
+      "confidence": "medium",
+      "source_ids": [
+        "src-america-cap-table-2026"
+      ],
+      "caveat": "Do not describe these percentages as officially verified until a corporate filing or shareholder register confirms them."
+    },
+    {
+      "claim_id": "telefe-sale-2025",
+      "subject_entity_id": "telefe",
+      "claim_kind": "ownership",
+      "predicate": "acquired_by",
+      "object_label": "A holding company led by Gustavo Scaglione",
+      "claim_text": "Arnold & Porter, counsel to Paramount Skydance Corporation, states that the sale of Televisión Federal S.A. (Telefe) to a holding company led by Gustavo Scaglione completed on 23 October 2025.",
+      "status": "primary_source_confirmed",
+      "as_of": "2025-10-23",
+      "confidence": "high",
+      "source_ids": [
+        "src-telefe-sale-2025"
+      ],
+      "caveat": "This confirms the reported 2025 transaction, not the current ultimate cap table after later reported developments."
+    },
+    {
+      "claim_id": "telefe-later-sale-report-2026",
+      "subject_entity_id": "telefe",
+      "claim_kind": "ownership",
+      "predicate": "reported_shareholding",
+      "object_label": "A later reported consortium; indexed buyer details are inconsistent",
+      "claim_text": "La Política Online's indexed 4 August 2026 report describes a further sale of Telefe by Paramount to a consortium. Its indexed headline and excerpt are inconsistent about the buyer grouping, and the article body could not be retrieved during this review.",
+      "status": "disputed",
+      "as_of": "2026-08-04",
+      "confidence": "low",
+      "source_ids": [
+        "src-telefe-sale-2025",
+        "src-telefe-lpo-2026"
+      ],
+      "conflicts_with": [
+        "telefe-sale-2025"
+      ],
+      "caveat": "Do not use this indexed report to assert a current owner. The 2025 transaction counsel notice and the later indexed report require primary-document reconciliation."
+    },
+    {
+      "claim_id": "blender-reported-control-2025",
+      "subject_entity_id": "blender",
+      "claim_kind": "control",
+      "predicate": "reported_control",
+      "object_label": "Augusto Marini / CaleGroup",
+      "claim_text": "El Cronista and Letra E reported in May 2025 that Augusto Marini/CaleGroup increased or assumed control of Blender. The reports differ on transaction stage and the extent of remaining participation, so the exact cap table is not established here.",
+      "status": "disputed",
+      "as_of": "2025-05-28",
+      "confidence": "low",
+      "source_ids": [
+        "src-blender-carajo-cronista-2025",
+        "src-blender-carajo-letrae-2025"
+      ],
+      "conflicts_with": [],
+      "caveat": "No primary corporate filing or signed transaction notice was reviewed. Do not convert reported control into a verified ownership percentage."
+    },
+    {
+      "claim_id": "carajo-reported-control-2025",
+      "subject_entity_id": "carajo",
+      "claim_kind": "control",
+      "predicate": "reported_control",
+      "object_label": "Augusto Marini / CaleGroup",
+      "claim_text": "El Cronista described Marini as a strategic partner in Carajo and reported a planned increase in participation; Letra E later described a 100% acquisition. The exact cap table and completion status remain unconfirmed by primary corporate documents in this edition.",
+      "status": "disputed",
+      "as_of": "2025-05-28",
+      "confidence": "low",
+      "source_ids": [
+        "src-blender-carajo-cronista-2025",
+        "src-blender-carajo-letrae-2025"
+      ],
+      "conflicts_with": [],
+      "caveat": "The two secondary reports differ materially on the extent of control. No percentage is treated as verified."
+    },
+    {
+      "claim_id": "la-nacion-historical-ownership-2018",
+      "subject_entity_id": "la-nacion",
+      "claim_kind": "ownership",
+      "predicate": "historical_ownership",
+      "object_label": "Saguier family 60%; Bartolomé Mitre 10% (2018 snapshot)",
+      "claim_text": "The 2018 Media Ownership Monitor snapshot identifies S.A. La Nación as the mother company and records 60% for the Saguier family and 10% for Bartolomé Mitre. These are historical snapshot figures, not a current cap table.",
+      "status": "historical_snapshot_only",
+      "as_of": null,
+      "confidence": "low",
+      "source_ids": [
+        "src-lanacion-mom-2018"
+      ],
+      "caveat": "The source is explicitly a 2018 snapshot; current ownership has not been established by this record."
+    }
+  ]
+}

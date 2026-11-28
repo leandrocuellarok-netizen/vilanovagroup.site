@@ -1,0 +1,264 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vilanovagroup.site/schemas/media-ownership-registry.schema.json",
+  "title": "Vilanova Argentina Media Ownership Claim Registry",
+  "description": "Source-attributed ownership, control and governance claims. Reported, disputed and historical claims must never be silently promoted to current verified ownership.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "registry_id",
+    "jurisdiction",
+    "reviewed_at",
+    "coverage_note",
+    "methodology",
+    "entities",
+    "sources",
+    "claims"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "registry_id": {
+      "const": "argentina-media-ownership"
+    },
+    "jurisdiction": {
+      "const": "AR"
+    },
+    "reviewed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "coverage_note": {
+      "type": "string",
+      "minLength": 30
+    },
+    "methodology": {
+      "type": "array",
+      "minItems": 4,
+      "items": {
+        "type": "string",
+        "minLength": 10
+      }
+    },
+    "entities": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "entity_id",
+          "display_name",
+          "entity_type",
+          "ownership_status",
+          "current_status_note"
+        ],
+        "properties": {
+          "entity_id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]{2,99}$"
+          },
+          "display_name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "entity_type": {
+            "enum": [
+              "media_group",
+              "company",
+              "outlet",
+              "holding",
+              "person",
+              "family_group"
+            ]
+          },
+          "official_url": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uri",
+            "pattern": "^https://"
+          },
+          "ownership_status": {
+            "enum": [
+              "documented",
+              "reported_only",
+              "partial",
+              "disputed",
+              "historical_only",
+              "unresolved"
+            ]
+          },
+          "current_status_note": {
+            "type": "string",
+            "minLength": 20
+          }
+        }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "source_id",
+          "publisher",
+          "title",
+          "url",
+          "source_type",
+          "published_at",
+          "accessed_at",
+          "access_note"
+        ],
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "pattern": "^src-[a-z0-9-]{3,100}$"
+          },
+          "publisher": {
+            "type": "string",
+            "minLength": 1
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https://"
+          },
+          "source_type": {
+            "enum": [
+              "official_corporate_disclosure",
+              "official_public_filing",
+              "transaction_counsel_notice",
+              "news_report",
+              "research_database",
+              "company_profile"
+            ]
+          },
+          "published_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date"
+          },
+          "accessed_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "access_note": {
+            "type": "string",
+            "minLength": 10
+          }
+        }
+      }
+    },
+    "claims": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "claim_id",
+          "subject_entity_id",
+          "claim_kind",
+          "predicate",
+          "object_label",
+          "claim_text",
+          "status",
+          "as_of",
+          "confidence",
+          "source_ids",
+          "caveat"
+        ],
+        "properties": {
+          "claim_id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]{2,100}$"
+          },
+          "subject_entity_id": {
+            "type": "string"
+          },
+          "claim_kind": {
+            "enum": [
+              "ownership",
+              "control",
+              "governance"
+            ]
+          },
+          "predicate": {
+            "enum": [
+              "controlled_by",
+              "acquired_by",
+              "reported_shareholding",
+              "reported_control",
+              "board_composition",
+              "historical_ownership"
+            ]
+          },
+          "object_label": {
+            "type": "string",
+            "minLength": 1
+          },
+          "claim_text": {
+            "type": "string",
+            "minLength": 20
+          },
+          "status": {
+            "enum": [
+              "primary_source_confirmed",
+              "reported_not_primary_confirmed",
+              "disputed",
+              "historical_snapshot_only"
+            ]
+          },
+          "as_of": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date"
+          },
+          "confidence": {
+            "enum": [
+              "high",
+              "medium",
+              "low"
+            ]
+          },
+          "source_ids": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string"
+            }
+          },
+          "caveat": {
+            "type": "string",
+            "minLength": 10
+          },
+          "inference_guard": {
+            "type": "string"
+          },
+          "conflicts_with": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

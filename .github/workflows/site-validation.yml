@@ -36,6 +36,10 @@ jobs:
         run: node scripts/test-media-review-queue.mjs
       - name: Run reviewed media candidate promotion regression tests
         run: node scripts/test-media-evidence-promotion.mjs
+      - name: Validate Argentina media ownership claim registry
+        run: node scripts/validate-media-ownership-registry.mjs
+      - name: Run media ownership registry regression tests
+        run: node scripts/test-media-ownership-registry.mjs
       - name: Run AI Fabric prompt quality regression tests
         run: node scripts/test-fabric-prompt.mjs
       - name: Validate evidence ledger
