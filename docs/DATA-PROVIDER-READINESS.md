@@ -1,7 +1,7 @@
 # VILANOVA AI SOLUTIONS — Data Provider Readiness Review
 
 **Research checked:** 28 November 2026.  
-**Status:** feasibility review only. No API app, paid account, provider contract, account connection, credit purchase or vendor terms have been accepted.  
+**Status:** feasibility review only. No provider is connected. No API app, paid account, provider contract, account connection, credit purchase or vendor terms have been accepted.  
 **Decision rule:** a provider is not connected until its commercial eligibility, scope, written terms, authorization and cost controls have been reviewed and explicitly approved.
 
 ## Executive decision
