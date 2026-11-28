@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vilanovagroup.site/schemas/influencer-profile.schema.json",
+  "title": "Vilanova Public Influencer Profile",
+  "description": "A source-backed directory record for a public creator or media personality. Private contact details and unsupported audience metrics are not permitted.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "profiles"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "profiles": { "type": "array", "items": { "$ref": "#/$defs/profile" } }
+  },
+  "$defs": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["publisher", "url", "source_type", "captured_at", "claim_supported"],
+      "properties": {
+        "publisher": { "type": "string", "minLength": 1, "maxLength": 300 },
+        "url": { "type": "string", "format": "uri", "pattern": "^https://" },
+        "source_type": { "enum": ["official_site", "platform_profile", "platform_badge", "public_document", "news_report", "other"] },
+        "published_at": { "type": "string", "format": "date-time" },
+        "captured_at": { "type": "string", "format": "date-time" },
+        "claim_supported": { "type": "string", "minLength": 1, "maxLength": 1000 }
+      }
+    },
+    "public_profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["platform", "handle", "url", "identity_status", "verification_method", "source"],
+      "properties": {
+        "platform": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "handle": { "type": "string", "minLength": 1, "maxLength": 150 },
+        "url": { "type": "string", "format": "uri", "pattern": "^https://" },
+        "identity_status": { "enum": ["verified", "claimed", "unverified", "disputed"] },
+        "verification_method": { "enum": ["platform_badge", "cross_linked_official_site", "official_publication", "self_declared", "unknown"] },
+        "source": { "$ref": "#/$defs/source" }
+      }
+    },
+    "profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["profile_id", "display_name", "category", "country_code", "status", "public_profiles", "evidence", "created_at", "updated_at", "last_reviewed_at"],
+      "properties": {
+        "profile_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{2,79}$" },
+        "display_name": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "category": { "enum": ["creator", "journalist", "presenter", "streamer", "public_figure", "media_personality"] },
+        "country_code": { "const": "AR" },
+        "status": { "enum": ["provisional", "verified", "disputed", "inactive"] },
+        "aliases": { "type": "array", "items": { "type": "string", "minLength": 1, "maxLength": 150 }, "uniqueItems": true },
+        "public_profiles": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/public_profile" } },
+        "evidence": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/source" } },
+        "created_at": { "type": "string", "format": "date-time" },
+        "updated_at": { "type": "string", "format": "date-time" },
+        "last_reviewed_at": { "type": "string", "format": "date-time" }
+      }
+    }
+  }
+}
