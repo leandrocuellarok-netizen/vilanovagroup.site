@@ -77,7 +77,7 @@ assert.equal(empty.status, "no_verified_commercial_evidence");
 assert.equal(empty.ranking, null);
 assert.equal(empty.composite_score, null);
 assert.equal(empty.summary.documented_brand_relationships, 0);
-assert.equal(exportCommercialIntelligenceCsv(empty).trimEnd().split("\\r\\n").length, 1,
+assert.equal(exportCommercialIntelligenceCsv(empty).trimEnd().split("\r\n").length, 1,
   "An empty report must export a header row only.");
 
 const fixtures = [

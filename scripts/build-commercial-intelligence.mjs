@@ -13,7 +13,7 @@ const timestamp = value => {
   const parsed = Date.parse(value);
   return Number.isFinite(parsed) ? parsed : null;
 };
-const normalizeName = value => String(value ?? "").normalize("NFKC").trim().replace(/\\s+/g, " ").toLocaleLowerCase("en");
+const normalizeName = value => String(value ?? "").normalize("NFKC").trim().replace(/\s+/g, " ").toLocaleLowerCase("en");
 
 function sourceRecord(event) {
   return {
@@ -226,7 +226,7 @@ export function buildCommercialIntelligence(ledger, directory, options = {}) {
       documented_brand_deal_events: new Set(brandRelationships.map(item => item.event.event_id)).size,
       documented_brand_relationships: brandRelationships.length,
       distinct_sponsoring_entities: distinctSponsoringEntities.size,
-      people_with_documented_brand_relationships: new Set(brandRelationships.map(item => item.event.event_id + "|" + entities.find(person => person.documented_brand_relationships.some(x => x.event.event_id === item.event.event_id))?.person.id)).size,
+      people_with_documented_brand_relationships: new Set(entities.filter(person => person.documented_brand_relationships.length).map(person => person.person.id)).size,
       documented_public_endorsement_events: new Set(endorsements.map(item => item.event.event_id)).size,
       documented_public_endorsements: endorsements.length,
       unresolved_brand_or_endorsement_claims: unresolvedClaims.length,
@@ -246,8 +246,8 @@ const CSV_COLUMNS = [
 
 function csvCell(value) {
   if (value === null || value === undefined) return '""';
-  let text = String(value).replace(/\\r\\n|\\r|\\n/g, " ");
-  if (typeof value === "string" && /^[\\u0000-\\u0020]*[=+\\-@]/.test(text)) text = "'" + text;
+  let text = String(value).replace(/\r\n|\r|\n/g, " ");
+  if (typeof value === "string" && /^[\u0000-\u0020]*[=+@-]/.test(text)) text = "'" + text;
   return '"' + text.replace(/"/g, '""') + '"';
 }
 
@@ -280,7 +280,7 @@ export function exportCommercialIntelligenceCsv(report) {
       pushRow(person, "unresolved_" + item.claim_type, null, null, item.event, "requires_human_review");
     }
   }
-  return rows.map(row => row.map(csvCell).join(",")).join("\\r\\n") + "\\r\\n";
+  return rows.map(row => row.map(csvCell).join(",")).join("\r\n") + "\r\n";
 }
 
 function run() {
