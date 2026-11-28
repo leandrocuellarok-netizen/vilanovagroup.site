@@ -68,7 +68,7 @@ function request(body = BASE_REQUEST, options = {}) {
   return new Request("https://app.example/api/v1/fabric/prompts", {
     method: options.method || "POST",
     headers,
-    body: options.body === undefined ? JSON.stringify(body) : options.body
+    body: (options.method === "GET" || options.method === "HEAD") ? undefined : (options.body === undefined ? JSON.stringify(body) : options.body)
   });
 }
 
