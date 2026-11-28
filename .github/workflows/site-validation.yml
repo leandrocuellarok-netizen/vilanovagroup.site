@@ -30,6 +30,8 @@ jobs:
         run: node scripts/validate-provider-registry.mjs
       - name: Run provider registry regression tests
         run: node scripts/test-provider-registry.mjs
+      - name: Run offline GDELT news adapter regression tests
+        run: node scripts/test-gdelt-doc-adapter.mjs
       - name: Run AI Fabric prompt quality regression tests
         run: node scripts/test-fabric-prompt.mjs
       - name: Validate evidence ledger
