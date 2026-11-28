@@ -35,6 +35,23 @@ const validMetric = {
 };
 assert.deepEqual(validateEvent(validMetric), [], "A complete platform metric must pass");
 
+const undatedCommercialEvent = structuredClone(validDisclosure);
+delete undatedCommercialEvent.source.published_at;
+assert.ok(validateEvent(undatedCommercialEvent).some(error => error.includes("published_at is required")),
+  "Commercial and public-event records without a publication date must be rejected");
+
+const publicationAfterCapture = structuredClone(validDisclosure);
+publicationAfterCapture.source.published_at = "2026-11-27T10:10:00-03:00";
+publicationAfterCapture.source.captured_at = "2026-11-27T10:05:00-03:00";
+assert.ok(validateEvent(publicationAfterCapture).some(error => error.includes("published_at cannot be later than source.captured_at")),
+  "A source cannot be captured before its stated publication time");
+
+const observationAfterCapture = structuredClone(validMetric);
+observationAfterCapture.observation_window.end = "2026-11-27T12:05:00-03:00";
+observationAfterCapture.metric.window_end = "2026-11-27T12:05:00-03:00";
+assert.ok(validateEvent(observationAfterCapture).some(error => error.includes("observation_window.end cannot be later than source.captured_at")),
+  "An observed metric window cannot end after the evidence capture timestamp");
+
 const invalidHttpSource = structuredClone(validDisclosure);
 invalidHttpSource.source.url = "http://example.org/not-secure";
 assert.ok(validateEvent(invalidHttpSource).some(error => error.includes("must be an HTTPS URL")),
@@ -66,4 +83,4 @@ const duplicateLedger = { schema_version: "1.0.0", events: [validDisclosure, str
 assert.ok(validateLedger(duplicateLedger).some(error => error.includes("duplicate event_id")),
   "Duplicate event IDs must be rejected");
 
-console.log("VILANOVA EVIDENCE LEDGER TESTS PASSED — empty baseline, valid disclosure, valid metric, HTTPS enforcement, metric completeness, time-window ordering, trend-window requirement and duplicate-ID rejection.");
+console.log("VILANOVA EVIDENCE LEDGER TESTS PASSED — empty baseline, valid disclosure, valid metric, HTTPS enforcement, metric completeness, time-window ordering, mandatory publication dates, publication/capture chronology, observation/capture chronology, trend-window requirement and duplicate-ID rejection.");
