@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   validate:
-    name: Validate the English site and interactive scripts
+    name: Validate the English site and intelligence tooling
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -36,6 +36,10 @@ jobs:
         run: node scripts/validate-influencer-profiles.mjs
       - name: Run public influencer directory regression tests
         run: node scripts/test-influencer-profiles.mjs
+      - name: Audit influencer profile freshness
+        run: node scripts/audit-influencer-freshness.mjs
+      - name: Test influencer profile freshness audit
+        run: node scripts/test-influencer-freshness.mjs
       - name: Build 24-hour Influence Radar evidence snapshot
         run: node scripts/influence-radar.mjs
       - name: Run Influence Radar aggregation regression tests

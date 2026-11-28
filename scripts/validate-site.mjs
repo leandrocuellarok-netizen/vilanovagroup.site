@@ -65,6 +65,10 @@ assert.ok(existsSync(resolve(root, "schemas/influencer-profile.schema.json")), "
 assert.ok(existsSync(resolve(root, "data/influencer-profiles.json")), "The public influencer directory must exist");
 assert.ok(existsSync(resolve(root, "scripts/validate-influencer-profiles.mjs")), "The public influencer validator must exist");
 assert.ok(existsSync(resolve(root, "scripts/test-influencer-profiles.mjs")), "The public influencer regression tests must exist");
+assert.ok(existsSync(resolve(root, "scripts/audit-influencer-freshness.mjs")), "The public influencer freshness audit must exist");
+assert.ok(existsSync(resolve(root, "scripts/test-influencer-freshness.mjs")), "The public influencer freshness audit tests must exist");
+assert.ok(existsSync(resolve(root, "docs/PROFILE-REVIEW-CADENCE.md")), "The profile review cadence must be documented");
+assert.ok(html.includes("PROFILE-REVIEW-CADENCE.md"), "The public site must link to the profile review cadence");
 const influencerSchema = JSON.parse(readFileSync(resolve(root, "schemas/influencer-profile.schema.json"), "utf8"));
 const influencerDirectory = JSON.parse(readFileSync(resolve(root, "data/influencer-profiles.json"), "utf8"));
 assert.equal(influencerSchema.$schema, "https://json-schema.org/draft/2020-12/schema", "Influencer profile schema must declare JSON Schema 2020-12");
