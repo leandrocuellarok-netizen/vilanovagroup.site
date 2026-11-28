@@ -111,6 +111,35 @@ assert.ok(providerDocs.includes("Research checked") && providerDocs.includes("No
   "Provider readiness assessment must state its review date and unconnected status");
 assert.ok(html.includes('href="https://github.com/leandrocuellarok-netizen/vilanovagroup.site/blob/main/docs/DATA-PROVIDER-READINESS.md"'),
   "Influence Radar must link to the provider readiness assessment");
+
+const gdeltAdapterPath = resolve(root, "scripts/gdelt-doc-adapter.mjs");
+const gdeltTestsPath = resolve(root, "scripts/test-gdelt-doc-adapter.mjs");
+const gdeltProtocolPath = resolve(root, "docs/GDELT-NEWS-INGESTION.md");
+const currentMediaBriefPath = resolve(root, "docs/AI-MEDIA-INTELLIGENCE-2026-11-28.md");
+assert.ok(existsSync(gdeltAdapterPath), "The read-only GDELT DOC adapter prototype must exist");
+assert.ok(existsSync(gdeltTestsPath), "The offline GDELT adapter regression suite must exist");
+assert.ok(existsSync(gdeltProtocolPath), "The GDELT ingestion protocol must be documented");
+assert.ok(existsSync(currentMediaBriefPath), "The dated 28 November Argentina media brief must exist");
+const gdeltAdapterSource = readFileSync(gdeltAdapterPath, "utf8");
+const gdeltTestsSource = readFileSync(gdeltTestsPath, "utf8");
+const gdeltProtocol = readFileSync(gdeltProtocolPath, "utf8");
+const currentMediaBrief = readFileSync(currentMediaBriefPath, "utf8");
+assert.ok(gdeltAdapterSource.includes("publication_at: null") && gdeltAdapterSource.includes("review_status: \"unreviewed\""),
+  "GDELT discovery candidates must not be promoted to verified publication evidence");
+assert.ok(gdeltTestsSource.includes("Retry-After") && gdeltTestsSource.includes("NON_JSON_RESPONSE"),
+  "GDELT tests must cover rate-limit handling and non-JSON upstream failures");
+assert.ok(gdeltProtocol.includes("six seconds") && gdeltProtocol.includes("not connected"),
+  "GDELT protocol must disclose conservative pacing and unconnected status");
+assert.ok(currentMediaBrief.includes("not proof that it is the most discussed topic") &&
+  currentMediaBrief.includes("No live trend rank"),
+  "The current media brief must distinguish editorial coverage from measured social trends");
+assert.ok(html.includes('href="https://github.com/leandrocuellarok-netizen/vilanovagroup.site/blob/main/docs/AI-MEDIA-INTELLIGENCE-2026-11-28.md"'),
+  "The public media section must link to Report 002");
+assert.ok(html.includes('href="https://github.com/leandrocuellarok-netizen/vilanovagroup.site/blob/main/docs/GDELT-NEWS-INGESTION.md"'),
+  "The public media section must link to the GDELT ingestion protocol");
+assert.ok(workflow.includes("node scripts/test-gdelt-doc-adapter.mjs"),
+  "The offline GDELT adapter tests must run in CI");
+
 assert.ok(workflow.includes("node scripts/validate-provider-registry.mjs") && workflow.includes("node scripts/test-provider-registry.mjs"),
   "Provider registry validation and regression tests must run in CI");
 
