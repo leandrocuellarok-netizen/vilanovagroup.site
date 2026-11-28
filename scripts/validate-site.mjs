@@ -55,8 +55,7 @@ const mailto = [...html.matchAll(/mailto:([^"'?]+)/g)].map(([, address]) => addr
 assert.deepEqual(mailto, ["strategy@vilanovagroup.site"], "The only contact channel must be the approved strategy email");
 assert.match(html, /FOUNDER\s*\/\s*LEANDRO A\. CUELLAR/i, "Founder attribution must be present");
 assert.match(html, /GENERAL COORDINATION\s*\/\s*ERICA ACOSTA/i, "General Coordinator attribution must be present");
-assert.ok(html.includes("“Behold, I make all things new.”"), "The exact footer quotation must be present");
-assert.ok(html.includes("REVELATION 21:5 — KJV"), "The footer citation must identify Revelation 21:5 KJV");
+assert.ok(html.includes("“Behold, I make all things new.” — Revelation 21:5 (KJV)"), "The exact footer quotation and citation must be present");
 
 assert.ok(html.includes("INFLUENCE RADAR AI"), "Influence Radar AI module must exist");
 assert.ok(html.includes("VILANOVA AI FABRIC"), "Vilanova AI Fabric module must exist");
