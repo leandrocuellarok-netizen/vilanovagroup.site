@@ -13,7 +13,7 @@ const TRUSTED_SOURCE_TYPES = new Set(["official_site","platform_badge","public_d
 function isObject(value) { return value !== null && typeof value === "object" && !Array.isArray(value); }
 function isDateTime(value) {
   return typeof value === "string" &&
-    /^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$/.test(value) &&
+    /^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:[.][0-9]+)?(?:Z|[+-][0-9]{2}:[0-9]{2})$/.test(value) &&
     Number.isFinite(Date.parse(value));
 }
 function isHttpsUrl(value) {
@@ -22,7 +22,7 @@ function isHttpsUrl(value) {
   catch { return false; }
 }
 function normalizedUrl(value) {
-  try { const u = new URL(value); u.hash = ""; u.search = ""; u.hostname = u.hostname.toLowerCase(); return u.toString().replace(/\\/$/, ""); }
+  try { const u = new URL(value); u.hash = ""; u.search = ""; u.hostname = u.hostname.toLowerCase(); const result = u.toString(); return result.endsWith("/") ? result.slice(0, -1) : result; }
   catch { return value; }
 }
 function requireText(value, path, errors, max = 1000) {
