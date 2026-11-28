@@ -140,11 +140,34 @@ assert.equal(report.exclusions.future_dated, 1);
 const matched = report.entities.find(item => item.person.id === "creator-001");
 assert.equal(matched.profile_match_status, "matched_verified_profile");
 assert.equal(matched.documented_brand_relationships[0].sponsoring_entity.id, "brand-001");
+assert.equal(matched.documented_brand_relationships[0].temporal_status, "current_status_not_assessed",
+  "A documented historical source must not imply that a sponsorship is still active.");
 assert.equal(matched.unresolved_claims[0].candidate_counterparties[0].status, "claimed");
 assert.equal(matched.documented_public_endorsements[0].event.event_id, "endorsement-documented");
+assert.equal(matched.documented_public_endorsements[0].temporal_status, "current_status_not_assessed",
+  "A documented endorsement must not be represented as currently active without fresh evidence.");
 const unmatched = report.entities.find(item => item.person.id === "creator-002");
 assert.equal(unmatched.profile_match_status, "no_directory_match");
 assert.equal(unmatched.unresolved_claims.length, 1);
+
+const historicalEvent = event({
+  id: "deal-historical",
+  hoursAgo: 24 * 800,
+  related: [{ id: "brand-historical", display_name: "Historical Test Brand", relationship: "sponsors", status: "documented" }]
+});
+const historicalReport = buildCommercialIntelligence(
+  { schema_version: "1.0.0", events: [historicalEvent] }, emptyDirectory, { now }
+);
+const historicalRelationship = historicalReport.entities[0].documented_brand_relationships[0];
+assert.ok(historicalRelationship.event.source.published_at < iso(24 * 365),
+  "The historical fixture must be older than one year.");
+assert.equal(historicalRelationship.temporal_status, "current_status_not_assessed",
+  "A historical sponsorship record must remain explicitly unassessed for current status.");
+const historicalCsv = exportCommercialIntelligenceCsv(historicalReport);
+assert.ok(historicalCsv.split("\r\n")[0].includes('"temporal_status"'),
+  "CSV output must expose the temporal-status column.");
+assert.ok(historicalCsv.includes('"current_status_not_assessed"'),
+  "CSV output must carry the current-status limitation.");
 
 const formulaEvent = event({
   id: "deal-formula",

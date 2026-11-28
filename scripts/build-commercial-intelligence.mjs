@@ -145,6 +145,7 @@ export function buildCommercialIntelligence(ledger, directory, options = {}) {
         person.documented_brand_relationships.push({
           sponsoring_entity: { id: item.id, display_name: item.display_name },
           relationship_status: "documented",
+          temporal_status: "current_status_not_assessed",
           event: eventRecord(event)
         });
       }
@@ -161,6 +162,7 @@ export function buildCommercialIntelligence(ledger, directory, options = {}) {
         person.documented_public_endorsements.push({
           endorsed_entity: { id: item.id, display_name: item.display_name },
           relationship_status: "documented",
+          temporal_status: "current_status_not_assessed",
           event: eventRecord(event)
         });
       }
@@ -214,6 +216,7 @@ export function buildCommercialIntelligence(ledger, directory, options = {}) {
       documented_brand_relationship_rule: "A verified brand_deal event plus an explicit related entity with relationship=sponsors and status=documented.",
       endorsement_rule: "Public endorsements are reported separately and are never treated as paid sponsorships without independent commercial evidence.",
       disclosure_rule: "Disclosure status is reproduced from the source record. Missing or unclear disclosure is not interpreted as proof that a relationship is undisclosed.",
+      relationship_temporality: "Documented means the source supports the relationship claim at publication time. It does not establish that a sponsorship or endorsement is active today. Current status remains not_assessed unless separately dated continuation or termination evidence is recorded and reviewed.",
       identity_matching: "Directory records are joined only by exact profile_id/entity.id and matching public display name or recorded alias.",
       ranking_rule: "No leaderboard, popularity score, fame score or composite influence score is calculated.",
       missing_data: "Unknown or absent evidence is not zero and is not a negative finding.",
@@ -239,7 +242,7 @@ export function buildCommercialIntelligence(ledger, directory, options = {}) {
 
 const CSV_COLUMNS = [
   "generated_at", "record_type", "person_id", "person_name", "profile_id", "profile_status",
-  "profile_match_status", "counterparty_id", "counterparty_name", "relationship_status",
+  "profile_match_status", "counterparty_id", "counterparty_name", "relationship_status", "temporal_status",
   "event_id", "claim", "source_publisher", "source_url", "published_at", "captured_at",
   "confidence", "disclosure_status", "disclosure_text", "evidence_status"
 ];
@@ -256,12 +259,12 @@ export function exportCommercialIntelligenceCsv(report) {
   if (!isObject(report) || !Array.isArray(report.entities) || typeof report.generated_at !== "string")
     throw new Error("report must contain generated_at and an entities array");
   const rows = [CSV_COLUMNS];
-  const pushRow = (person, recordType, counterparty, relationStatus, event, evidenceStatus) => {
+  const pushRow = (person, recordType, counterparty, relationStatus, temporalStatus, event, evidenceStatus) => {
     rows.push([
       report.generated_at, recordType, person.person.id, person.person.display_name,
       person.directory_profile?.profile_id ?? "", person.directory_profile?.status ?? "",
       person.profile_match_status, counterparty?.id ?? "", counterparty?.display_name ?? "",
-      relationStatus ?? "", event.event_id, event.claim, event.source.publisher, event.source.url,
+      relationStatus ?? "", temporalStatus ?? "current_status_not_assessed", event.event_id, event.claim, event.source.publisher, event.source.url,
       event.source.published_at, event.source.captured_at, event.confidence,
       event.disclosure.status, event.disclosure.text ?? "", evidenceStatus
     ]);
@@ -270,14 +273,14 @@ export function exportCommercialIntelligenceCsv(report) {
   for (const person of report.entities) {
     for (const item of person.documented_brand_relationships) {
       pushRow(person, "documented_brand_relationship", item.sponsoring_entity,
-        item.relationship_status, item.event, "documented");
+        item.relationship_status, item.temporal_status, item.event, "documented");
     }
     for (const item of person.documented_public_endorsements) {
       pushRow(person, "documented_public_endorsement", item.endorsed_entity,
-        item.relationship_status, item.event, "documented_public_endorsement_not_paid_sponsorship");
+        item.relationship_status, item.temporal_status, item.event, "documented_public_endorsement_not_paid_sponsorship");
     }
     for (const item of person.unresolved_claims) {
-      pushRow(person, "unresolved_" + item.claim_type, null, null, item.event, "requires_human_review");
+      pushRow(person, "unresolved_" + item.claim_type, null, null, "current_status_not_assessed", item.event, "requires_human_review");
     }
   }
   return rows.map(row => row.map(csvCell).join(",")).join("\r\n") + "\r\n";

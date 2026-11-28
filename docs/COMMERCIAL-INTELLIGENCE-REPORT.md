@@ -22,6 +22,10 @@ A documented sponsoring relationship requires both a verified `brand_deal` event
 
 A public endorsement is reported separately. It is never automatically treated as paid sponsorship or a commercial agreement.
 
+## Temporal interpretation
+
+`documented` means that the cited source supports the relationship claim at the source publication time. It does **not** establish that a sponsorship or endorsement remains active today. Every documented relationship therefore carries `temporal_status: current_status_not_assessed`. The report must not label a relationship current, ongoing or active unless separately dated continuation evidence is recorded and reviewed. Likewise, an ended relationship requires explicit termination evidence; absence of a recent post is not proof of termination.
+
 ## Unresolved claims
 
 A verified event whose counterparty is absent, claimed or unverified is retained in the report's unresolved-claims section. It is not promoted to a documented relationship. A human reviewer must open the source and resolve the counterparty evidence before the record can be used as a confirmed commercial relationship.
@@ -37,7 +41,7 @@ The report reproduces the disclosure status stored with the event: `disclosed`, 
 ## Outputs
 
 - JSON: grouped person records, profile match status, documented brand relationships, public endorsements, unresolved claims, source provenance and exclusions.
-- CSV: one row per documented relationship or unresolved claim, with stable headers and spreadsheet-formula neutralization.
+- CSV: one row per documented relationship or unresolved claim, with stable headers, spreadsheet-formula neutralization and an explicit temporal-status field.
 - Both exports include generation time and original source URLs, publisher, publication date, capture date and confidence.
 
 The report intentionally emits no leaderboard, composite score, fame score, audience estimate or commercial value estimate.
