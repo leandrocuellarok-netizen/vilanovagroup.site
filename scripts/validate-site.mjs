@@ -61,6 +61,16 @@ assert.ok(Array.isArray(evidenceLedger.events), "Evidence ledger events must be 
 assert.ok(existsSync(resolve(root, "scripts/validate-evidence-ledger.mjs")), "Evidence validator must exist");
 assert.ok(existsSync(resolve(root, "scripts/test-evidence-ledger.mjs")), "Evidence regression tests must exist");
 assert.ok(html.includes('href="https://github.com/leandrocuellarok-netizen/vilanovagroup.site/blob/main/docs/EVIDENCE-LEDGER.md"'), "The public site must link to its evidence protocol");
+assert.ok(existsSync(resolve(root, "schemas/influencer-profile.schema.json")), "The public influencer profile schema must exist");
+assert.ok(existsSync(resolve(root, "data/influencer-profiles.json")), "The public influencer directory must exist");
+assert.ok(existsSync(resolve(root, "scripts/validate-influencer-profiles.mjs")), "The public influencer validator must exist");
+assert.ok(existsSync(resolve(root, "scripts/test-influencer-profiles.mjs")), "The public influencer regression tests must exist");
+const influencerSchema = JSON.parse(readFileSync(resolve(root, "schemas/influencer-profile.schema.json"), "utf8"));
+const influencerDirectory = JSON.parse(readFileSync(resolve(root, "data/influencer-profiles.json"), "utf8"));
+assert.equal(influencerSchema.$schema, "https://json-schema.org/draft/2020-12/schema", "Influencer profile schema must declare JSON Schema 2020-12");
+assert.equal(influencerDirectory.schema_version, "1.0.0", "Influencer directory version must be explicit");
+assert.ok(Array.isArray(influencerDirectory.profiles), "Influencer directory profiles must be an array");
+assert.ok(html.includes('href="https://github.com/leandrocuellarok-netizen/vilanovagroup.site/blob/main/docs/ARGENTINA-INFLUENCER-DIRECTORY.md"'), "The public site must link to the Argentina influencer directory protocol");
 
 const assetPaths = [...new Set([...html.matchAll(/(?:src|href)="(\/assets\/[^"]+)"/g)].map(([, path]) => path))];
 for (const asset of assetPaths) {
