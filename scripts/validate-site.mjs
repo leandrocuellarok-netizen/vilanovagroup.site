@@ -15,6 +15,14 @@ const workflow = readFileSync(resolve(root, ".github/workflows/site-validation.y
 const commercialBuilder = readFileSync(resolve(root, "scripts/build-commercial-intelligence.mjs"), "utf8");
 const commercialTests = readFileSync(resolve(root, "scripts/test-commercial-intelligence.mjs"), "utf8");
 const commercialDocs = readFileSync(resolve(root, "docs/COMMERCIAL-INTELLIGENCE-REPORT.md"), "utf8");
+const providerRegistryPath = resolve(root, "data/provider-capabilities.json");
+const providerValidatorPath = resolve(root, "scripts/validate-provider-registry.mjs");
+const providerTestsPath = resolve(root, "scripts/test-provider-registry.mjs");
+const providerDocsPath = resolve(root, "docs/DATA-PROVIDER-READINESS.md");
+const providerRegistry = JSON.parse(readFileSync(providerRegistryPath, "utf8"));
+const providerValidatorSource = readFileSync(providerValidatorPath, "utf8");
+const providerTestsSource = readFileSync(providerTestsPath, "utf8");
+const providerDocs = readFileSync(providerDocsPath, "utf8");
 const siteContentHasReviewExport = auditScript.includes("exportReviewQueueCsv") &&
   auditTests.includes("Formula-like") && reviewDocs.includes("--csv > influencer-review-queue.csv") &&
   workflow.includes("actions/upload-artifact@v4");
@@ -88,6 +96,23 @@ assert.ok(workflow.includes("node scripts/build-commercial-intelligence.mjs --js
 assert.ok(commercialBuilder.includes("commercialEventKey") && commercialBuilder.includes("duplicate_source_event") &&
   commercialTests.includes("tracking-parameter duplicate") && commercialDocs.includes("Source-level deduplication"),
   "Commercial intelligence must deduplicate repeated source events and document its limits.");
+assert.equal(providerRegistry.schema_version, "1.0.0", "Provider capability registry version must be explicit");
+assert.ok(providerRegistry.providers.length >= 7, "Provider readiness must cover multiple relevant data routes");
+assert.ok(providerRegistry.providers.every(provider => provider.connection_status !== "connected"), "No provider may be shown as connected without permission");
+assert.equal(providerRegistry.providers.find(provider => provider.provider_id === "tiktok-research-api")?.commercial_product_eligible, false,
+  "TikTok Research API must not be treated as a commercial feed");
+assert.equal(providerRegistry.providers.find(provider => provider.provider_id === "meta-content-library-api")?.commercial_product_eligible, false,
+  "Meta Content Library must remain restricted to qualifying research access");
+assert.ok(providerValidatorSource.includes("authorization_record") && providerValidatorSource.includes("spend_limit_configured"),
+  "Provider validator must enforce approval and spend-limit gates");
+assert.ok(providerTestsSource.includes("synthetic-secret-must-never-be-stored") && providerTestsSource.includes("duplicate provider_id"),
+  "Provider regression tests must cover credential leakage and duplicate records");
+assert.ok(providerDocs.includes("Research checked") && providerDocs.includes("No provider is connected"),
+  "Provider readiness assessment must state its review date and unconnected status");
+assert.ok(html.includes('href="https://github.com/leandrocuellarok-netizen/vilanovagroup.site/blob/main/docs/DATA-PROVIDER-READINESS.md"'),
+  "Influence Radar must link to the provider readiness assessment");
+assert.ok(workflow.includes("node scripts/validate-provider-registry.mjs") && workflow.includes("node scripts/test-provider-registry.mjs"),
+  "Provider registry validation and regression tests must run in CI");
 
 const influencerSchema = JSON.parse(readFileSync(resolve(root, "schemas/influencer-profile.schema.json"), "utf8"));
 const influencerDirectory = JSON.parse(readFileSync(resolve(root, "data/influencer-profiles.json"), "utf8"));
@@ -117,4 +142,4 @@ try {
   rmSync(tempDir, { recursive: true, force: true });
 }
 
-console.log("VILANOVA SITE VALIDATION PASSED — " + expectedSections.length + " sections, " + assetPaths.length + " local assets, unique IDs, internal links, footer/contact policy, AI module honesty, commercial intelligence pipeline, reduced motion, keyboard focus and inline JavaScript syntax.");
+console.log("VILANOVA SITE VALIDATION PASSED — " + expectedSections.length + " sections, " + assetPaths.length + " local assets, unique IDs, internal links, footer/contact policy, AI module honesty, commercial intelligence pipeline, provider permissions and eligibility, reduced motion, keyboard focus and inline JavaScript syntax.");

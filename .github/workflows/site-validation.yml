@@ -26,6 +26,10 @@ jobs:
           node-version: 22
       - name: Run structural and JavaScript checks
         run: node scripts/validate-site.mjs
+      - name: Validate provider capabilities and connection permissions
+        run: node scripts/validate-provider-registry.mjs
+      - name: Run provider registry regression tests
+        run: node scripts/test-provider-registry.mjs
       - name: Run AI Fabric prompt quality regression tests
         run: node scripts/test-fabric-prompt.mjs
       - name: Validate evidence ledger

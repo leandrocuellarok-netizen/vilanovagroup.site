@@ -1,7 +1,7 @@
 # VILANOVA AI SOLUTIONS — Production Integration Blueprint
 
 **Status:** architecture and provider assessment only. No external analytics provider, model API, paid account, or user account is connected.  
-**Research checked:** 27 November 2026.  
+**Research checked:** 27 November 2026. **Provider assessment update:** 28 November 2026. See [DATA-PROVIDER-READINESS.md](DATA-PROVIDER-READINESS.md) for the current commercial-eligibility, cost and access decision; where provider status differs, the newer review supersedes this initial table.  
 **Commercial rule:** do not purchase, accept vendor terms, create paid commitments, or connect personal/business accounts without explicit authorization.
 
 ## 1. Product boundary

@@ -1,0 +1,324 @@
+{
+  "schema_version": "1.0.0",
+  "reviewed_at": "2026-11-28T08:01:00Z",
+  "product_scope": "Commercial public-influence and media-intelligence research. No provider is connected.",
+  "providers": [
+    {
+      "provider_id": "youtube-data-api-v3",
+      "provider_name": "Google",
+      "product_name": "YouTube Data API v3",
+      "domain": "video",
+      "integration_stage": "public_metadata_pilot_candidate",
+      "connection_status": "not_connected",
+      "authentication": "Server-side API key for public resources; OAuth is required for user-authorized resources.",
+      "commercial_use": "subject_to_youtube_api_terms_and_quota",
+      "commercial_product_eligible": "conditional",
+      "commercial_commitment_required": false,
+      "user_authorization_required": false,
+      "approval_required": false,
+      "spend_controls_required": false,
+      "capabilities": [
+        "public_video_metadata",
+        "public_video_view_like_comment_counts",
+        "public_channel_metadata"
+      ],
+      "known_constraints": [
+        "videos.list has a documented quota cost of one unit per call; the default allocation includes 100 search.list calls per day and 10,000 units per day for other methods.",
+        "Public view counts are cumulative platform counters, not unique reach, audience demographics or proof of sponsorship.",
+        "Search pagination consumes additional quota; cache results and monitor project quota.",
+        "Collection and display must comply with YouTube API Services Terms and Developer Policies."
+      ],
+      "official_sources": [
+        {
+          "title": "YouTube Data API — Videos: list",
+          "url": "https://developers.google.com/youtube/data/reference/rest/v3/videos/list",
+          "checked_at": "2026-11-28"
+        },
+        {
+          "title": "YouTube Data API — Quota and Compliance Audits",
+          "url": "https://developers.google.com/youtube/data/guides/quota_and_compliance_audits",
+          "checked_at": "2026-11-28"
+        }
+      ]
+    },
+    {
+      "provider_id": "youtube-analytics-api",
+      "provider_name": "Google",
+      "product_name": "YouTube Analytics API",
+      "domain": "video_analytics",
+      "integration_stage": "creator_authorized_metrics_only",
+      "connection_status": "not_connected",
+      "authentication": "OAuth 2.0 authorization by the channel owner; content-owner reports require eligible YouTube content-partner access.",
+      "commercial_use": "authorized_channel_data_only_subject_to_terms",
+      "commercial_product_eligible": "conditional",
+      "commercial_commitment_required": false,
+      "user_authorization_required": true,
+      "approval_required": false,
+      "spend_controls_required": false,
+      "capabilities": [
+        "authorized_channel_activity_reports",
+        "authorized_channel_views_and_subscriptions",
+        "authorized_channel_geographic_and_time_dimensions"
+      ],
+      "known_constraints": [
+        "The authorizing user must own the requested channel; channel==MINE refers to the authenticated user's channel.",
+        "This cannot provide private analytics for an unrelated influencer without that creator's authorization.",
+        "Content-owner reports are limited to YouTube content partners."
+      ],
+      "official_sources": [
+        {
+          "title": "YouTube Analytics API — Channel Reports",
+          "url": "https://developers.google.com/youtube/analytics/channel_reports",
+          "checked_at": "2026-11-28"
+        },
+        {
+          "title": "YouTube Analytics API — Content Owner Reports",
+          "url": "https://developers.google.com/youtube/analytics/content_owner_reports",
+          "checked_at": "2026-11-28"
+        }
+      ]
+    },
+    {
+      "provider_id": "x-api-v2",
+      "provider_name": "X",
+      "product_name": "X API v2",
+      "domain": "public_conversation",
+      "integration_stage": "paid_pilot_candidate_requires_approval",
+      "connection_status": "not_connected",
+      "authentication": "Developer app credentials and server-side bearer-token authentication; credentials must never enter browser code.",
+      "commercial_use": "pay_per_usage_with_developer_terms",
+      "commercial_product_eligible": "conditional",
+      "commercial_commitment_required": true,
+      "user_authorization_required": false,
+      "approval_required": false,
+      "spend_controls_required": true,
+      "capabilities": [
+        "public_post_search_and_lookup",
+        "public_post_metrics",
+        "location_based_trends",
+        "conversation_threads"
+      ],
+      "known_constraints": [
+        "Official pricing reviewed 28 November 2026 lists USD 0.005 per post read, USD 0.010 per user read and USD 0.010 per Trends request; rates can change.",
+        "Pay-per-use credits must be purchased before requests; no subscription or minimum spend is stated on the reviewed pricing page.",
+        "The pay-per-use plan is capped at 3 million post reads per monthly billing cycle before Enterprise access is needed.",
+        "No credits, payment method, auto-recharge or API app has been configured. Require an explicit spend ceiling and disabled auto-recharge before any pilot.",
+        "X trends and post search are X-specific signals, not a complete measure of Argentine public opinion or cross-platform hashtag volume."
+      ],
+      "official_sources": [
+        {
+          "title": "X API — About the X API",
+          "url": "https://docs.x.com/x-api/getting-started/about-x-api",
+          "checked_at": "2026-11-28"
+        },
+        {
+          "title": "X API — Pay-per-usage pricing and credits",
+          "url": "https://docs.x.com/x-api/getting-started/pricing",
+          "checked_at": "2026-11-28"
+        }
+      ]
+    },
+    {
+      "provider_id": "brandwatch-consumer-research-api",
+      "provider_name": "Brandwatch",
+      "product_name": "Consumer Research API and Developer APIs",
+      "domain": "cross_platform_social_listening",
+      "integration_stage": "vendor_evaluation_only",
+      "connection_status": "not_connected",
+      "authentication": "Vendor-provisioned API user credentials and bearer token; documented API access requires a Regular or Admin user.",
+      "commercial_use": "vendor_account_contract_and_data_pack_terms_required",
+      "commercial_product_eligible": "conditional",
+      "commercial_commitment_required": true,
+      "user_authorization_required": true,
+      "approval_required": false,
+      "spend_controls_required": true,
+      "capabilities": [
+        "consumer_research_query_and_mention_export",
+        "documented_real_time_streaming_capability",
+        "analysis_api_aggregations",
+        "owned_social_measure_api"
+      ],
+      "known_constraints": [
+        "Public documentation does not establish Vilanova access, data coverage, price or contract rights.",
+        "The documented Consumer Research API client limit is 30 calls per 10 minutes; account-specific limits must be confirmed.",
+        "Brandwatch states that X mentions may have full text and most metadata stripped; online news and LinkedIn are also listed among sources that may be affected.",
+        "A vendor discovery call and written coverage, retention, export, redistribution, SLA and price terms are required before selection."
+      ],
+      "official_sources": [
+        {
+          "title": "Brandwatch Developer APIs",
+          "url": "https://www.brandwatch.com/products/apis/",
+          "checked_at": "2026-11-28"
+        },
+        {
+          "title": "Brandwatch API Authentication",
+          "url": "https://developers.brandwatch.com/docs/authenticate",
+          "checked_at": "2026-11-28"
+        },
+        {
+          "title": "Brandwatch API Best Practices and Rate Limits",
+          "url": "https://developers.brandwatch.com/docs/best-practices",
+          "checked_at": "2026-11-28"
+        },
+        {
+          "title": "Brandwatch Data Restrictions",
+          "url": "https://developers.brandwatch.com/docs/data-restrictions",
+          "checked_at": "2026-11-28"
+        }
+      ]
+    },
+    {
+      "provider_id": "gdelt-doc-2",
+      "provider_name": "The GDELT Project",
+      "product_name": "DOC 2.0 API",
+      "domain": "online_news_coverage",
+      "integration_stage": "low_cost_news_pilot_candidate",
+      "connection_status": "not_connected",
+      "authentication": "No API key is required for the documented DOC 2.0 query endpoint.",
+      "commercial_use": "review_project_terms_and_attribution_before_deployment",
+      "commercial_product_eligible": "conditional",
+      "commercial_commitment_required": false,
+      "user_authorization_required": false,
+      "approval_required": false,
+      "spend_controls_required": false,
+      "capabilities": [
+        "online_news_article_discovery",
+        "news_coverage_volume_timelines",
+        "coverage_tone_distributions",
+        "language_and_source_country_filters"
+      ],
+      "known_constraints": [
+        "This is an online-news source, not a social-post, hashtag-volume, influencer-reach or sponsorship API.",
+        "DOC 2.0 article-list search covers a rolling three-month window; timeline modes have different historical coverage.",
+        "The project rate-limits requests. Implement caching, conservative polling, content-type checks and backoff on HTTP 429.",
+        "Coverage volume measures monitored news coverage, not population opinion or the total number of people discussing a topic."
+      ],
+      "official_sources": [
+        {
+          "title": "GDELT DOC 2.0 API Debuts — capabilities and time windows",
+          "url": "https://blog.gdeltproject.org/gdelt-doc-2-0-api-debuts/",
+          "checked_at": "2026-11-28"
+        },
+        {
+          "title": "GDELT Project — API Rate Limiting and Web NGrams guidance",
+          "url": "https://blog.gdeltproject.org/ukraine-api-rate-limiting-web-ngrams-3-0/",
+          "checked_at": "2026-11-28"
+        }
+      ]
+    },
+    {
+      "provider_id": "tiktok-research-api",
+      "provider_name": "TikTok",
+      "product_name": "TikTok Research API / Research Tools",
+      "domain": "short_video_research",
+      "integration_stage": "not_suitable_for_commercial_product",
+      "connection_status": "not_connected",
+      "authentication": "Research Tools application, approved research project and controlled access; a developer account alone is insufficient.",
+      "commercial_use": "qualified_independent_noncommercial_research_only",
+      "commercial_product_eligible": false,
+      "commercial_commitment_required": false,
+      "user_authorization_required": false,
+      "approval_required": true,
+      "spend_controls_required": false,
+      "capabilities": [
+        "approved_public_account_research",
+        "approved_public_video_research",
+        "approved_public_comment_research"
+      ],
+      "known_constraints": [
+        "TikTok's current Research Tools FAQ explicitly says creators, advertisers and commercial users are not eligible.",
+        "Published eligibility focuses on qualified academic and non-profit research in specified regions; Argentina is not listed on the reviewed eligibility page.",
+        "Do not use this research-only route as the data source for a commercial Influence Radar product."
+      ],
+      "official_sources": [
+        {
+          "title": "TikTok Research API — Product and eligibility",
+          "url": "https://developers.tiktok.com/products/research-api/",
+          "checked_at": "2026-11-28"
+        },
+        {
+          "title": "TikTok Research API — Frequently Asked Questions",
+          "url": "https://developers.tiktok.com/docs/en/research-api-faq/",
+          "checked_at": "2026-11-28"
+        }
+      ]
+    },
+    {
+      "provider_id": "meta-content-library-api",
+      "provider_name": "Meta",
+      "product_name": "Meta Content Library and API",
+      "domain": "facebook_instagram_public_content_research",
+      "integration_stage": "restricted_research_access_not_commercial_feed",
+      "connection_status": "not_connected",
+      "authentication": "Application through Research Tools Manager and approved access in Meta Secure Research Environment or an approved cleanroom.",
+      "commercial_use": "qualified_academic_or_nonprofit_public_interest_research_only",
+      "commercial_product_eligible": false,
+      "commercial_commitment_required": false,
+      "user_authorization_required": false,
+      "approval_required": true,
+      "spend_controls_required": false,
+      "capabilities": [
+        "approved_public_facebook_content_research",
+        "approved_public_instagram_content_research",
+        "secure_environment_programmatic_analysis"
+      ],
+      "known_constraints": [
+        "Eligibility requires affiliation with a qualified academic institution or a qualified non-academic not-for-profit research institution.",
+        "Access is application-controlled and uses a secure research environment.",
+        "Meta states there is no fee for eligible Secure Research Environment access, but free access does not remove eligibility, contractual, security or publication restrictions.",
+        "This is not a general commercial social-listening feed for Vilanova."
+      ],
+      "official_sources": [
+        {
+          "title": "Meta Content Library — Get Access and Eligibility",
+          "url": "https://developers.facebook.com/documentation/meta-content-library/get-access",
+          "checked_at": "2026-11-28"
+        },
+        {
+          "title": "Meta Content Library — Overview and Controlled Access",
+          "url": "https://developers.facebook.com/documentation/meta-content-library",
+          "checked_at": "2026-11-28"
+        }
+      ]
+    },
+    {
+      "provider_id": "direct-public-evidence-review",
+      "provider_name": "Public primary sources and publisher records",
+      "product_name": "Manual public-source research workflow",
+      "domain": "documented_public_evidence",
+      "integration_stage": "available_as_manual_research_process",
+      "connection_status": "manual_only",
+      "authentication": "No platform credentials; each source is opened, dated, attributed and reviewed by a human researcher.",
+      "commercial_use": "review_copyright_database_terms_and_reuse_rights_per_source",
+      "commercial_product_eligible": "conditional",
+      "commercial_commitment_required": false,
+      "user_authorization_required": false,
+      "approval_required": false,
+      "spend_controls_required": false,
+      "capabilities": [
+        "official_brand_announcements",
+        "creator_disclosures",
+        "company_filings_and_regulatory_records",
+        "publisher_articles_and_public_press_releases",
+        "dated_public_event_records"
+      ],
+      "known_constraints": [
+        "Manual review is required to attribute a statement, distinguish sponsorship from endorsement and assess whether a relationship remains current.",
+        "Public availability does not automatically grant republication rights; preserve short factual extracts, citations and source-specific reuse restrictions.",
+        "A source URL alone is not proof that the underlying claim is true; record the exact passage, date and reviewer decision."
+      ],
+      "official_sources": [
+        {
+          "title": "Vilanova Evidence Ledger Protocol",
+          "url": "https://github.com/leandrocuellarok-netizen/vilanovagroup.site/blob/main/docs/EVIDENCE-LEDGER.md",
+          "checked_at": "2026-11-28"
+        },
+        {
+          "title": "Vilanova Commercial Intelligence Report Standard",
+          "url": "https://github.com/leandrocuellarok-netizen/vilanovagroup.site/blob/main/docs/COMMERCIAL-INTELLIGENCE-REPORT.md",
+          "checked_at": "2026-11-28"
+        }
+      ]
+    }
+  ]
+}
