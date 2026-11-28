@@ -30,11 +30,15 @@ Use one evidence-event format across VILANOVA AI MEDIA and INFLUENCE RADAR AI. T
 
 Confidence is a separate assessment of source quality and claim support. It must not be used as a substitute for verification status.
 
+## Verification review record
+
+Every `verified`, `disputed` or `withdrawn` event must carry a `review` object with a stable internal `reviewer_id`, ISO 8601 `reviewed_at` timestamp, review `method` and a concise `decision_basis`. The review timestamp cannot predate the source capture. Use an internal reviewer identifier, not a personal email address or phone number. A status is not self-authenticating: setting `verification_status: verified` without this review provenance is rejected by the validator.
+
 ## Files
 
 - schemas/evidence-event.schema.json — machine-readable JSON Schema.
 - data/evidence-events.json — append-only event ledger; currently empty.
-- scripts/validate-evidence-ledger.mjs — dependency-free runtime validator.
+- scripts/validate-evidence-ledger.mjs — dependency-free runtime validator, including reviewer provenance and review chronology.
 - scripts/test-evidence-ledger.mjs — positive and negative regression tests.
 
 ## Operational rules

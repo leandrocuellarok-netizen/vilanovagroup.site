@@ -8,9 +8,11 @@ const ENTITY_TYPES = new Set(["person","creator","media_group","outlet","brand",
 const SOURCE_TYPES = new Set(["official_document","platform_api","brand_disclosure","creator_disclosure","news_report","research_report","public_profile","other"]);
 const VERIFICATION = new Set(["verified","unverified","disputed","withdrawn"]);
 const CONFIDENCE = new Set(["high","medium","low"]);
+const REVIEW_METHODS = new Set(["manual_source_review","official_record_cross_check","authorized_platform_data","other"]);
+const REVIEW_REQUIRED_STATES = new Set(["verified","disputed","withdrawn"]);
 const RELATIONSHIPS = new Set(["sponsors","endorses","owns","controls","mentions","appears_with","other"]);
 const RELATED_STATUS = new Set(["documented","claimed","unverified"]);
-const EVENT_KEYS = new Set(["event_id","event_type","entity","claim","source","verification_status","confidence","observation_window","metric","related_entities","disclosure","notes"]);
+const EVENT_KEYS = new Set(["event_id","event_type","entity","claim","source","verification_status","confidence","observation_window","metric","related_entities","disclosure","review","notes"]);
 const ENTITY_KEYS = new Set(["id","display_name","entity_type","canonical_url"]);
 const SOURCE_KEYS = new Set(["publisher","url","source_type","published_at","captured_at"]);
 const METRIC_KEYS = new Set(["name","value","unit","platform","scope","window_start","window_end"]);
@@ -82,6 +84,26 @@ export function validateEvent(event, index = 0) {
 
   if (!VERIFICATION.has(event.verification_status)) errors.push(path + ".verification_status is unsupported");
   if (!CONFIDENCE.has(event.confidence)) errors.push(path + ".confidence is unsupported");
+
+  if (REVIEW_REQUIRED_STATES.has(event.verification_status) && event.review === undefined)
+    errors.push(path + ".review is required for " + event.verification_status + " events");
+  if (event.review !== undefined) {
+    if (!isObject(event.review)) errors.push(path + ".review must be an object");
+    else {
+      hasOnlyKeys(event.review, new Set(["reviewer_id","reviewed_at","method","decision_basis"]), path + ".review", errors);
+      requireString(event.review.reviewer_id, path + ".review.reviewer_id", errors, 100);
+      if (typeof event.review.reviewer_id === "string" && event.review.reviewer_id.trim().length < 3)
+        errors.push(path + ".review.reviewer_id must contain at least 3 characters");
+      if (!isDateTime(event.review.reviewed_at))
+        errors.push(path + ".review.reviewed_at must be an ISO 8601 timestamp with timezone");
+      if (!REVIEW_METHODS.has(event.review.method))
+        errors.push(path + ".review.method is unsupported");
+      requireString(event.review.decision_basis, path + ".review.decision_basis", errors, 1000);
+      if (isObject(event.source) && isDateTime(event.source.captured_at) && isDateTime(event.review.reviewed_at) &&
+          Date.parse(event.review.reviewed_at) < Date.parse(event.source.captured_at))
+        errors.push(path + ".review.reviewed_at cannot be earlier than source.captured_at");
+    }
+  }
   if (event.observation_window !== undefined) {
     validateWindow(event.observation_window, path + ".observation_window", errors);
     if (isObject(event.observation_window) && isDateTime(event.observation_window.end) &&

@@ -14,10 +14,32 @@ const validDisclosure = {
     published_at: "2026-11-27T10:00:00-03:00", captured_at: "2026-11-27T10:05:00-03:00" },
   verification_status: "verified",
   confidence: "high",
+  review: {
+    reviewer_id: "synthetic-reviewer",
+    reviewed_at: "2026-11-27T10:06:00-03:00",
+    method: "manual_source_review",
+    decision_basis: "Synthetic fixture reviewed against its synthetic source."
+  },
   related_entities: [{ id: "brand-placeholder", display_name: "Test Brand", relationship: "sponsors", status: "documented" }],
   disclosure: { status: "disclosed", text: "Synthetic test fixture only." }
 };
 assert.deepEqual(validateEvent(validDisclosure), [], "A well-formed disclosure event must pass");
+
+const missingReview = structuredClone(validDisclosure);
+delete missingReview.review;
+assert.ok(validateEvent(missingReview).some(error => error.includes(".review is required")),
+  "A verified event without an attributable review record must be rejected");
+
+const reviewBeforeCapture = structuredClone(validDisclosure);
+reviewBeforeCapture.review.reviewed_at = "2026-11-27T10:04:00-03:00";
+assert.ok(validateEvent(reviewBeforeCapture).some(error => error.includes("reviewed_at cannot be earlier than source.captured_at")),
+  "A review cannot predate the evidence capture it assesses");
+
+const disputedWithoutReview = structuredClone(validDisclosure);
+disputedWithoutReview.verification_status = "disputed";
+delete disputedWithoutReview.review;
+assert.ok(validateEvent(disputedWithoutReview).some(error => error.includes(".review is required")),
+  "A disputed adjudication must retain reviewer provenance");
 
 const validMetric = {
   event_id: "platform-metric-001",
@@ -83,4 +105,4 @@ const duplicateLedger = { schema_version: "1.0.0", events: [validDisclosure, str
 assert.ok(validateLedger(duplicateLedger).some(error => error.includes("duplicate event_id")),
   "Duplicate event IDs must be rejected");
 
-console.log("VILANOVA EVIDENCE LEDGER TESTS PASSED — empty baseline, valid disclosure, valid metric, HTTPS enforcement, metric completeness, time-window ordering, mandatory publication dates, publication/capture chronology, observation/capture chronology, trend-window requirement and duplicate-ID rejection.");
+console.log("VILANOVA EVIDENCE LEDGER TESTS PASSED — empty baseline, valid disclosure, valid metric, HTTPS enforcement, metric completeness, time-window ordering, mandatory publication dates, publication/capture chronology, observation/capture chronology, trend-window requirement, reviewer provenance, review chronology and duplicate-ID rejection.");

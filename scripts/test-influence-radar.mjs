@@ -2,7 +2,14 @@ import assert from "node:assert/strict";
 import { buildRadarSnapshot } from "./influence-radar.mjs";
 const now=new Date("2026-11-27T20:00:00.000Z"),iso=h=>new Date(now.getTime()-h*3600000).toISOString();
 const base=()=>({event_id:"event-default",event_type:"brand_deal",entity:{id:"creator-eri-test",display_name:"Test Creator",entity_type:"creator"},claim:"Synthetic fixture used only for automated testing.",source:{publisher:"Example Publisher",url:"https://example.org/source",source_type:"brand_disclosure",published_at:iso(2),captured_at:iso(1)},verification_status:"verified",confidence:"high",related_entities:[{id:"brand-test",display_name:"Test Brand",relationship:"sponsors",status:"documented"}],disclosure:{status:"disclosed",text:"Synthetic fixture only."}});
-const event=overrides=>({...base(),...overrides});
+const event=overrides=>{
+ const merged={...base(),...overrides};
+ if(["verified","disputed","withdrawn"].includes(merged.verification_status)){
+  const captured=Date.parse(merged.source.captured_at);
+  merged.review={reviewer_id:"synthetic-reviewer",reviewed_at:new Date(captured+60000).toISOString(),method:"manual_source_review",decision_basis:"Synthetic fixture only; automated tests verify the event contract."};
+ }else delete merged.review;
+ return merged;
+};
 const metric=({id,value,startHoursAgo,endHoursAgo,capturedHoursAgo,scope="channel_total"})=>event({event_id:id,event_type:"platform_metric",source:{publisher:"Example Platform API",url:"https://example.org/metrics/"+id,source_type:"platform_api",captured_at:iso(capturedHoursAgo)},observation_window:{start:iso(startHoursAgo),end:iso(endHoursAgo),timezone:"UTC"},metric:{name:"views",value,unit:"views",platform:"Example Video",scope,window_start:iso(startHoursAgo),window_end:iso(endHoursAgo)},related_entities:[]});
 const empty=buildRadarSnapshot({schema_version:"1.0.0",events:[]},{now});
 assert.equal(empty.status,"no_verified_signals");assert.equal(empty.ranking,null);assert.equal(empty.composite_score,null);assert.deepEqual(empty.entities,[]);

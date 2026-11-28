@@ -34,6 +34,14 @@ function event({
     },
     verification_status: verification,
     confidence,
+    ...(verification === "verified" ? {
+      review: {
+        reviewer_id: "synthetic-reviewer",
+        reviewed_at: new Date(Date.parse(iso(hoursAgo - 0.1)) + 60000).toISOString(),
+        method: "manual_source_review",
+        decision_basis: "Synthetic test fixture only."
+      }
+    } : {}),
     related_entities: related,
     disclosure
   };
@@ -140,6 +148,8 @@ assert.equal(report.exclusions.future_dated, 1);
 const matched = report.entities.find(item => item.person.id === "creator-001");
 assert.equal(matched.profile_match_status, "matched_verified_profile");
 assert.equal(matched.documented_brand_relationships[0].sponsoring_entity.id, "brand-001");
+assert.equal(matched.documented_brand_relationships[0].event.review.reviewer_id, "synthetic-reviewer",
+  "Commercial report JSON must preserve reviewer provenance.");
 assert.equal(matched.documented_brand_relationships[0].temporal_status, "current_status_not_assessed",
   "A documented historical source must not imply that a sponsorship is still active.");
 assert.equal(matched.unresolved_claims[0].candidate_counterparties[0].status, "claimed");
@@ -164,6 +174,10 @@ assert.ok(historicalRelationship.event.source.published_at < iso(24 * 365),
 assert.equal(historicalRelationship.temporal_status, "current_status_not_assessed",
   "A historical sponsorship record must remain explicitly unassessed for current status.");
 const historicalCsv = exportCommercialIntelligenceCsv(historicalReport);
+assert.ok(historicalCsv.split("\r\n")[0].includes('"reviewer_id"'),
+  "CSV output must expose the reviewer provenance.");
+assert.ok(historicalCsv.includes('"synthetic-reviewer"'),
+  "CSV output must preserve the reviewer identifier.");
 assert.ok(historicalCsv.split("\r\n")[0].includes('"temporal_status"'),
   "CSV output must expose the temporal-status column.");
 assert.ok(historicalCsv.includes('"current_status_not_assessed"'),
@@ -196,6 +210,7 @@ const futureCapture = event({
   related: [{ id: "brand-capture", display_name: "Capture Brand", relationship: "sponsors", status: "documented" }]
 });
 futureCapture.source.captured_at = new Date(now.getTime() + 3600000).toISOString();
+futureCapture.review.reviewed_at = new Date(Date.parse(futureCapture.source.captured_at) + 60000).toISOString();
 assert.equal(buildCommercialIntelligence(
   { schema_version: "1.0.0", events: [futureCapture] }, emptyDirectory, { now }
 ).exclusions.future_dated, 1);
@@ -204,4 +219,4 @@ assert.throws(() => buildCommercialIntelligence({ schema_version: "1.0.0", event
   /Invalid evidence ledger/);
 assert.throws(() => exportCommercialIntelligenceCsv(null), /generated_at and an entities array/);
 
-console.log("VILANOVA COMMERCIAL INTELLIGENCE TESTS PASSED — empty baseline, verified-only commercial events, documented sponsor relationships, separate endorsements, unresolved claims, exact profile matching, future-date exclusions, spreadsheet formula-injection protection and deterministic CSV.");
+console.log("VILANOVA COMMERCIAL INTELLIGENCE TESTS PASSED — empty baseline, verified-only commercial events, documented sponsor relationships, separate endorsements, unresolved claims, exact profile matching, future-date exclusions, reviewer provenance, spreadsheet formula-injection protection and deterministic CSV.");

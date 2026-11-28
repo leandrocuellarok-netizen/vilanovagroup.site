@@ -31,6 +31,12 @@ function eventRecord(event) {
     claim: event.claim,
     source: sourceRecord(event),
     confidence: event.confidence,
+    review: event.review ? {
+      reviewer_id: event.review.reviewer_id,
+      reviewed_at: event.review.reviewed_at,
+      method: event.review.method,
+      decision_basis: event.review.decision_basis
+    } : null,
     disclosure: {
       status: event.disclosure?.status ?? "unclear",
       text: event.disclosure?.text ?? null
@@ -244,7 +250,7 @@ const CSV_COLUMNS = [
   "generated_at", "record_type", "person_id", "person_name", "profile_id", "profile_status",
   "profile_match_status", "counterparty_id", "counterparty_name", "relationship_status", "temporal_status",
   "event_id", "claim", "source_publisher", "source_url", "published_at", "captured_at",
-  "confidence", "disclosure_status", "disclosure_text", "evidence_status"
+  "confidence", "reviewer_id", "reviewed_at", "review_method", "review_decision_basis", "disclosure_status", "disclosure_text", "evidence_status"
 ];
 
 function csvCell(value) {
@@ -266,7 +272,8 @@ export function exportCommercialIntelligenceCsv(report) {
       person.profile_match_status, counterparty?.id ?? "", counterparty?.display_name ?? "",
       relationStatus ?? "", temporalStatus ?? "current_status_not_assessed", event.event_id, event.claim, event.source.publisher, event.source.url,
       event.source.published_at, event.source.captured_at, event.confidence,
-      event.disclosure.status, event.disclosure.text ?? "", evidenceStatus
+      event.review?.reviewer_id ?? "", event.review?.reviewed_at ?? "", event.review?.method ?? "",
+      event.review?.decision_basis ?? "", event.disclosure.status, event.disclosure.text ?? "", evidenceStatus
     ]);
   };
 

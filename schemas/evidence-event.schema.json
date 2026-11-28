@@ -256,6 +256,41 @@
     "notes": {
       "type": "string",
       "maxLength": 3000
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reviewer_id",
+        "reviewed_at",
+        "method",
+        "decision_basis"
+      ],
+      "properties": {
+        "reviewer_id": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 100,
+          "description": "Stable internal reviewer identifier; do not put personal contact details here."
+        },
+        "reviewed_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "method": {
+          "enum": [
+            "manual_source_review",
+            "official_record_cross_check",
+            "authorized_platform_data",
+            "other"
+          ]
+        },
+        "decision_basis": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        }
+      }
     }
   },
   "allOf": [
@@ -294,6 +329,27 @@
       "then": {
         "required": [
           "observation_window"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "verification_status": {
+            "enum": [
+              "verified",
+              "disputed",
+              "withdrawn"
+            ]
+          }
+        },
+        "required": [
+          "verification_status"
+        ]
+      },
+      "then": {
+        "required": [
+          "review"
         ]
       }
     }

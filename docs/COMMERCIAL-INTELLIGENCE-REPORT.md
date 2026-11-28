@@ -14,7 +14,7 @@ A record is eligible only when:
 
 1. Its event type is `brand_deal` or `endorsement`.
 2. The primary entity is a person or creator.
-3. The event verification status is `verified`.
+3. The event verification status is `verified` and includes a valid reviewer record (reviewer ID, timestamp, method and decision basis).
 4. Confidence is `high` or `medium`.
 5. Publication and capture timestamps are present, valid and not in the future relative to report generation.
 
@@ -42,14 +42,14 @@ The report reproduces the disclosure status stored with the event: `disclosed`, 
 
 - JSON: grouped person records, profile match status, documented brand relationships, public endorsements, unresolved claims, source provenance and exclusions.
 - CSV: one row per documented relationship or unresolved claim, with stable headers, spreadsheet-formula neutralization and an explicit temporal-status field.
-- Both exports include generation time and original source URLs, publisher, publication date, capture date and confidence.
+- Both exports include generation time, original source URLs, publisher, publication date, capture date, confidence and reviewer provenance.
 
 The report intentionally emits no leaderboard, composite score, fame score, audience estimate or commercial value estimate.
 
 ## Current limitations
 
 - The report reads only `data/evidence-events.json` and `data/influencer-profiles.json`.
-- It does not fetch source URLs or verify that a page remains available.
+- It does not fetch source URLs or verify that a page remains available. Reviewer provenance records who/what internal reviewer identity made the verification decision and when; it does not replace independent source review.
 - It does not query private platform analytics or infer contracts from images, tags, guest appearances or co-occurrence.
 - It does not calculate reach, engagement, sentiment, brand lift, price or ROI.
 - An empty report means no eligible local evidence is currently recorded. It does not mean that no sponsorships or endorsements exist in the market.
