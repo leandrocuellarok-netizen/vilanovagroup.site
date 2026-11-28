@@ -154,7 +154,8 @@ export function createAiFabricHandler(dependencies = {}) {
   const rateLimit = config.rateLimit || { limit: 5, windowMs: 60000 };
 
   return async function handleAiFabricRequest(request) {
-    const requestId = makeId();
+    const candidateId = makeId();
+    const requestId = typeof candidateId === "string" && UUID_PATTERN.test(candidateId) ? candidateId : randomUUID();
 
     if (request.method !== "POST") {
       return apiError(405, "method_not_allowed", requestId, {}, { allow: "POST" });
@@ -237,9 +238,12 @@ export function createAiFabricHandler(dependencies = {}) {
     } catch {
       return apiError(503, "rate_limiter_unavailable", requestId);
     }
-    if (rateResult === false || rateResult?.allowed === false) {
-      const retryAfter = Math.max(1, Math.min(3600, Number(rateResult?.retryAfterSeconds) || 60));
-      return apiError(429, "rate_limited", requestId, {}, { "retry-after": String(retryAfter) });
+    if (rateResult !== true && rateResult?.allowed !== true) {
+      if (rateResult === false || rateResult?.allowed === false) {
+        const retryAfter = Math.max(1, Math.min(3600, Number(rateResult?.retryAfterSeconds) || 60));
+        return apiError(429, "rate_limited", requestId, {}, { "retry-after": String(retryAfter) });
+      }
+      return apiError(503, "rate_limiter_invalid_response", requestId);
     }
 
     const ceilingUsd = config.perRequestBudgetUsd;
@@ -277,11 +281,11 @@ export function createAiFabricHandler(dependencies = {}) {
     } catch {
       return contractFailure("unavailable", requestId, payload.target_word_count, "upstream_unavailable", clock);
     }
-    if (!reservation || reservation.reserved !== true || typeof reservation.reservationId !== "string") {
+    if (!reservation || reservation.reserved !== true || typeof reservation.reservationId !== "string" || !reservation.reservationId.trim()) {
       return contractFailure("budget_exceeded", requestId, payload.target_word_count, "budget_ceiling", clock);
     }
 
-    const signal = AbortSignal.timeout(timeoutMs);
+    const signal = AbortSignal.any([request.signal, AbortSignal.timeout(timeoutMs)]);
     let generated;
     try {
       generated = await dependencies.provider.generate({
@@ -307,14 +311,17 @@ export function createAiFabricHandler(dependencies = {}) {
     const text = typeof generated?.text === "string" ? generated.text.trim() : "";
     const usage = generated?.usage || {};
     const modelReference = generated?.modelReference || {};
-    const actualCostUsd = usage.actualCostUsd === null || usage.actualCostUsd === undefined
+    const reportedActualCostUsd = usage.actualCostUsd;
+    const actualCostUsd = reportedActualCostUsd === null || reportedActualCostUsd === undefined
       ? null
-      : usage.actualCostUsd;
+      : isNonNegativeNumber(reportedActualCostUsd) ? reportedActualCostUsd : null;
+    const actualCostFieldIsValid = reportedActualCostUsd === null || reportedActualCostUsd === undefined ||
+      isNonNegativeNumber(reportedActualCostUsd);
     const usageIsValid =
       isNonNegativeInteger(usage.inputTokens) &&
       isNonNegativeInteger(usage.outputTokens) &&
       isNonNegativeNumber(usage.estimatedCostUsd) &&
-      (actualCostUsd === null || isNonNegativeNumber(actualCostUsd));
+      actualCostFieldIsValid;
     const modelReferenceIsValid =
       typeof modelReference.providerId === "string" &&
       PROVIDER_ID_PATTERN.test(modelReference.providerId) &&

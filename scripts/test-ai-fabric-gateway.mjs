@@ -68,7 +68,8 @@ function request(body = BASE_REQUEST, options = {}) {
   return new Request("https://app.example/api/v1/fabric/prompts", {
     method: options.method || "POST",
     headers,
-    body: (options.method === "GET" || options.method === "HEAD") ? undefined : (options.body === undefined ? JSON.stringify(body) : options.body)
+    body: (options.method === "GET" || options.method === "HEAD") ? undefined : (options.body === undefined ? JSON.stringify(body) : options.body),
+    ...(options.signal ? { signal: options.signal } : {})
   });
 }
 
@@ -120,6 +121,31 @@ async function payload(response) {
   const response = await createAiFabricHandler(dependencies)(request());
   assert.equal(response.status, 429);
   assert.equal(response.headers.get("retry-after"), "3600");
+}
+{
+  const { dependencies, calls } = makeDependencies({ consumeRateLimit: async () => undefined });
+  const response = await createAiFabricHandler(dependencies)(request());
+  assert.equal(response.status, 503);
+  assert.equal((await payload(response)).error.code, "rate_limiter_invalid_response");
+  assert.equal(calls.generated, 0);
+}
+{
+  const controller = new AbortController();
+  const { dependencies, calls } = makeDependencies({
+    provider: {
+      maxCostEnforced: true,
+      estimateMaximumCost: async () => 0.8,
+      generate: async ({ signal }) => {
+        controller.abort();
+        assert.equal(signal.aborted, true);
+        throw new Error("synthetic client cancellation");
+      }
+    }
+  });
+  const response = await createAiFabricHandler(dependencies)(request(BASE_REQUEST, { signal: controller.signal }));
+  assert.equal(response.status, 503);
+  assert.equal((await payload(response)).error_code, "upstream_unavailable");
+  assert.equal(calls.settled[0].outcome, "unknown");
 }
 {
   const { dependencies } = makeDependencies({ provider: null });
@@ -246,7 +272,7 @@ async function payload(response) {
   assert.equal(body.error_code, "no_provider");
 }
 {
-  const { dependencies } = makeDependencies({ config: { allowedOrigins: ["https://app.example"], perRequestBudgetUsd: 1 } });
+  const { dependencies } = makeDependencies({ config: { allowedOrigins: ["https://app.example"] } });
   const response = await createAiFabricHandler(dependencies)(request());
   const body = await payload(response);
   assert.equal(response.status, 503);

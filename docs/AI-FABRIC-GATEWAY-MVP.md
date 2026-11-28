@@ -21,7 +21,7 @@ Regression suite: scripts/test-ai-fabric-gateway.mjs
 6. Require a provider adapter that explicitly declares max-cost enforcement.
 7. Estimate the maximum request cost and reject it before dispatch if it exceeds the server-side per-request ceiling.
 8. Atomically reserve the estimated maximum against the user's/global budget.
-9. Call the provider with an AbortSignal timeout and a server-owned maximum cost. The provider adapter owns its secret and must enforce its own output-token ceiling.
+9. Call the provider with a signal combining client disconnect and timeout, plus a server-owned maximum cost. The provider adapter owns its secret and must enforce its own output-token ceiling.
 10. Run a deterministic local quality gate for intent preservation, English output and factuality guardrails.
 11. Reconcile the budget reservation before returning the prompt. A missing actual-cost figure remains pending reconciliation; an unknown upstream outcome is not silently released.
 12. Return a no-store response. No prompt content is written to logs or persisted by this module.
@@ -31,8 +31,8 @@ Regression suite: scripts/test-ai-fabric-gateway.mjs
 The route supplies these server-only dependencies:
 
 - authenticate(request) returns a principal with a stable internal id or null.
-- consumeRateLimit({ principalId, requestId, limit, windowMs }) must be atomic across concurrent requests.
-- reserveBudget({ principalId, requestId, clientRequestId, amountUsd, ceilingUsd }) atomically reserves the maximum estimated cost.
+- consumeRateLimit({ principalId, requestId, limit, windowMs }) must be atomic across concurrent requests and return an explicit allowed boolean. Missing or malformed decisions fail closed.
+- reserveBudget({ principalId, requestId, clientRequestId, amountUsd, ceilingUsd }) atomically reserves the maximum estimated cost and must enforce clientRequestId idempotency when supplied.
 - settleBudget({ reservationId, requestId, actualCostUsd, outcome }) reconciles a completed, rejected, failed or unknown request. Unknown charges must remain held for reconciliation.
 - provider.maxCostEnforced must be true.
 - provider.estimateMaximumCost({ request }) returns a finite non-negative USD maximum.

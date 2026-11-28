@@ -126,4 +126,4 @@ Run:
 
 The contract regression test checks schema structure and critical cross-field invariants using Node.js built-ins. The gateway suite exercises the handler with synthetic dependencies and no network calls. Neither test is a general-purpose JSON Schema implementation or a substitute for review of a production identity, budget, provider or hosting adapter.
 
-The gateway core is executable but not deployed. No backend or model is configured; no backend route is mounted or deployed. These files do not connect an AI provider, perform semantic translation, generate a production-length prompt or authorize paid usage.
+The gateway core is executable but not deployed. No backend route or model is configured. These files do not connect an AI provider, perform semantic translation, generate a production-length prompt or authorize paid usage.
