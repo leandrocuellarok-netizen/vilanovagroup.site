@@ -33,7 +33,7 @@ The adjudication record must identify the queue and candidate, provide a stable 
 node scripts/promote-reviewed-media-candidate.mjs artifacts/media-review-queue.json artifacts/media-review-decision.json data/evidence-events.json artifacts/proposed-evidence-events.json
 ```
 
-The utility performs no network request. It validates the existing ledger, validates the six-step review record, creates a single `news_mention` event, attaches provider/queue/candidate provenance, validates the proposed ledger again and writes a new file atomically.
+The utility performs no network request and does not fetch or scrape article pages. It validates the existing ledger, validates the six-step review record, creates a single `news_mention` event, attaches provider/queue/candidate provenance, validates the proposed ledger again and writes a new file atomically.
 
 It refuses to overwrite any input or existing output file. The original queue remains unchanged and continues to identify the candidate as unreviewed; the new Evidence Ledger event carries the immutable provenance link. A candidate or event ID already present in the ledger is rejected.
 
