@@ -94,9 +94,17 @@ assert.throws(
   /already been promoted/,
   "The same queue candidate must not be imported twice."
 );
+const eventIdCollisionLedger = {
+  schema_version: "1.0.0",
+  events: [{
+    ...structuredClone(promoted.events[0]),
+    provenance: { ...promoted.events[0].provenance, candidate_id: "mc_abcdef0123456789abcdef01" }
+  }]
+};
+assert.deepEqual(validateLedger(eventIdCollisionLedger), [], "The event-ID collision fixture must itself be valid.");
 assert.throws(
-  () => promoteReviewedMediaCandidate(emptyLedger, queue, { ...decision, event_id: "media-news-mention-001" }),
-  /event_id already exists|duplicate/,
+  () => promoteReviewedMediaCandidate(eventIdCollisionLedger, queue, { ...decision, event_id: "media-news-mention-001" }),
+  /event_id already exists/,
   "Existing event IDs must not be reused."
 );
 
