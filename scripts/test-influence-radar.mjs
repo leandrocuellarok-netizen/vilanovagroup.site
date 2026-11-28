@@ -16,7 +16,7 @@ const fixtures=[
  event({event_id:"disputed-001",verification_status:"disputed",source:{...base().source,url:"https://example.org/disputed"}}),
  event({event_id:"low-confidence-001",confidence:"low",source:{...base().source,url:"https://example.org/low"}}),
  event({event_id:"old-001",source:{...base().source,url:"https://example.org/old",published_at:iso(25)}}),
- event({event_id:"future-001",source:{...base().source,url:"https://example.org/future",published_at:new Date(now.getTime()+3600000).toISOString()}}),
+ event({event_id:"future-001",source:{...base().source,url:"https://example.org/future",published_at:new Date(now.getTime()+3600000).toISOString(),captured_at:new Date(now.getTime()+7200000).toISOString()}}),
  event({event_id:"outlet-001",entity:{id:"outlet-test",display_name:"Test Outlet",entity_type:"outlet"},source:{...base().source,url:"https://example.org/outlet"}}),
  metric({id:"metric-previous",value:1000,startHoursAgo:47,endHoursAgo:23,capturedHoursAgo:22}),
  metric({id:"metric-current",value:1250,startHoursAgo:26,endHoursAgo:2,capturedHoursAgo:1}),
