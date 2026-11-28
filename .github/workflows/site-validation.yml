@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: site-validation-${{ github.ref }}
+  group: site-validation-\${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -44,6 +44,8 @@ jobs:
         run: node scripts/test-fabric-prompt.mjs
       - name: Run AI Fabric API contract regression tests
         run: node scripts/test-ai-fabric-contract.mjs
+      - name: Run AI Fabric gateway security and budget tests
+        run: node scripts/test-ai-fabric-gateway.mjs
       - name: Validate evidence ledger
         run: node scripts/validate-evidence-ledger.mjs
       - name: Run evidence ledger regression tests
