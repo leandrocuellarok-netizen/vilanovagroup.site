@@ -17,7 +17,6 @@ const fixtures=[
  event({event_id:"low-confidence-001",confidence:"low",source:{...base().source,url:"https://example.org/low"}}),
  event({event_id:"old-001",source:{...base().source,url:"https://example.org/old",published_at:iso(25)}}),
  event({event_id:"future-001",source:{...base().source,url:"https://example.org/future",published_at:new Date(now.getTime()+3600000).toISOString()}}),
- event({event_id:"undated-001",source:{publisher:"Example Publisher",url:"https://example.org/undated",source_type:"news_report",captured_at:iso(1)}}),
  event({event_id:"outlet-001",entity:{id:"outlet-test",display_name:"Test Outlet",entity_type:"outlet"},source:{...base().source,url:"https://example.org/outlet"}}),
  metric({id:"metric-previous",value:1000,startHoursAgo:47,endHoursAgo:23,capturedHoursAgo:22}),
  metric({id:"metric-current",value:1250,startHoursAgo:26,endHoursAgo:2,capturedHoursAgo:1}),
@@ -29,7 +28,7 @@ assert.equal(s.summary.qualifying_events,7);assert.equal(s.summary.entities_with
 assert.equal(s.summary.brand_deals,1);assert.equal(s.summary.endorsements,1);assert.equal(s.summary.public_appearances,1);assert.equal(s.summary.news_mentions,1);assert.equal(s.summary.platform_metric_snapshots,3);assert.equal(s.summary.comparable_momentum_series,1);
 assert.equal(s.entities[0].dimensions.brand_deals.length,1);assert.equal(s.entities[0].dimensions.endorsements.length,1);assert.equal(s.entities[0].dimensions.public_appearances.length,1);assert.equal(s.entities[0].dimensions.news_mentions.length,1);assert.equal(s.entities[0].dimensions.platform_metrics.length,3);
 assert.equal(s.entities[0].momentum.length,1);assert.equal(s.entities[0].momentum[0].delta,250);assert.equal(s.entities[0].momentum[0].percent_change,25);assert.equal(s.entities[0].momentum[0].direction,"up");assert.equal(s.entities[0].momentum[0].scope,"channel_total");
-assert.equal(s.exclusions.duplicate_source_event,1);assert.equal(s.exclusions.not_verified,2);assert.equal(s.exclusions.low_confidence,1);assert.equal(s.exclusions.outside_observation_window,2);assert.equal(s.exclusions.missing_event_timestamp,1);assert.equal(s.exclusions.non_person_entity,1);
+assert.equal(s.exclusions.duplicate_source_event,1);assert.equal(s.exclusions.not_verified,2);assert.equal(s.exclusions.low_confidence,1);assert.equal(s.exclusions.outside_observation_window,2);assert.equal(s.exclusions.missing_event_timestamp,0);assert.equal(s.exclusions.non_person_entity,1);
 const zero=buildRadarSnapshot({schema_version:"1.0.0",events:[metric({id:"zero-previous",value:0,startHoursAgo:47,endHoursAgo:23,capturedHoursAgo:22}),metric({id:"zero-current",value:20,startHoursAgo:26,endHoursAgo:2,capturedHoursAgo:1})]},{now});
 assert.equal(zero.entities[0].momentum[0].percent_change,null);
 const ambiguous=buildRadarSnapshot({schema_version:"1.0.0",events:[
@@ -43,6 +42,10 @@ const unequalWindows=buildRadarSnapshot({schema_version:"1.0.0",events:[
  metric({id:"unequal-current",value:150,startHoursAgo:26,endHoursAgo:2,capturedHoursAgo:1})
 ]},{now});
 assert.equal(unequalWindows.entities[0].momentum,null,"Different observation-window durations must not be compared");
+const undatedNews=event({event_id:"undated-news-001",event_type:"news_mention",source:{publisher:"Example Publisher",url:"https://example.org/undated-news",source_type:"news_report",captured_at:iso(1)}});
+assert.throws(()=>buildRadarSnapshot({schema_version:"1.0.0",events:[undatedNews]},{now}),/published_at is required/,
+  "The ledger must reject undated news events before they enter the 24-hour aggregation");
+
 assert.throws(()=>buildRadarSnapshot({schema_version:"1.0.0",events:[{event_id:"broken"}]},{now}),/Invalid evidence ledger/);
 assert.throws(()=>buildRadarSnapshot({schema_version:"1.0.0",events:[]},{now,windowHours:0}),/windowHours/);
 console.log("INFLUENCE RADAR TESTS PASSED — 24-hour filtering, verified-only evidence, confidence gates, source deduplication, comparable metric momentum, unknown values, zero-baseline handling and no composite leaderboard.");
