@@ -166,6 +166,34 @@ assert.ok(mediaQueueDocs.includes("does not fetch articles") && mediaQueueDocs.i
 assert.ok(html.includes('href="https://github.com/leandrocuellarok-netizen/vilanovagroup.site/blob/main/docs/MEDIA-REVIEW-QUEUE.md"'),
   "The public media desk must link to the human-review queue protocol");
 assert.ok(workflow.includes("node scripts/test-media-review-queue.mjs"), "Media review queue tests must run in CI");
+const mediaPromotionScriptPath = resolve(root, "scripts/promote-reviewed-media-candidate.mjs");
+const mediaPromotionTestsPath = resolve(root, "scripts/test-media-evidence-promotion.mjs");
+const mediaPromotionSchemaPath = resolve(root, "schemas/media-review-decision.schema.json");
+const mediaPromotionDocsPath = resolve(root, "docs/MEDIA-EVIDENCE-PROMOTION.md");
+assert.ok(existsSync(mediaPromotionScriptPath), "Reviewed media candidate promotion must exist");
+assert.ok(existsSync(mediaPromotionTestsPath), "Reviewed media promotion regression tests must exist");
+assert.ok(existsSync(mediaPromotionSchemaPath), "Human media decision schema must exist");
+assert.ok(existsSync(mediaPromotionDocsPath), "Media evidence promotion protocol must exist");
+const mediaPromotionSource = readFileSync(mediaPromotionScriptPath, "utf8");
+const mediaPromotionTests = readFileSync(mediaPromotionTestsPath, "utf8");
+const mediaPromotionSchema = JSON.parse(readFileSync(mediaPromotionSchemaPath, "utf8"));
+const mediaPromotionDocs = readFileSync(mediaPromotionDocsPath, "utf8");
+const evidenceValidatorSource = readFileSync(resolve(root, "scripts/validate-evidence-ledger.mjs"), "utf8");
+assert.equal(mediaPromotionSchema.$schema, "https://json-schema.org/draft/2020-12/schema");
+assert.equal(mediaPromotionSchema.properties.steps.minItems, 6);
+assert.ok(mediaPromotionSource.includes("Exactly six completed review steps") &&
+  mediaPromotionSource.includes("already been promoted") &&
+  mediaPromotionSource.includes("validateEvent(event)"), "Promotion must require complete review and ledger validation");
+assert.ok(mediaPromotionTests.includes("immutable inputs") && mediaPromotionTests.includes("already been promoted"),
+  "Promotion tests must cover immutable inputs and duplicate candidate rejection");
+assert.ok(evidenceValidatorSource.includes("duplicate promoted media candidate") &&
+  evidenceValidatorSource.includes("provenance.provider_id"), "Evidence Ledger must validate and deduplicate media provenance");
+assert.ok(mediaPromotionDocs.includes("does not fetch") && mediaPromotionDocs.includes("refuses to overwrite"),
+  "Promotion protocol must document its offline and non-destructive boundaries");
+assert.ok(workflow.includes("node scripts/test-media-evidence-promotion.mjs"),
+  "Media evidence promotion tests must run in CI");
+assert.ok(html.includes('href="https://github.com/leandrocuellarok-netizen/vilanovagroup.site/blob/main/docs/MEDIA-EVIDENCE-PROMOTION.md"'),
+  "The public media desk must link to the promotion protocol");
 
 assert.ok(workflow.includes("node scripts/validate-provider-registry.mjs") && workflow.includes("node scripts/test-provider-registry.mjs"),
   "Provider registry validation and regression tests must run in CI");

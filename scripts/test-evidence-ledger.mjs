@@ -105,4 +105,26 @@ const duplicateLedger = { schema_version: "1.0.0", events: [validDisclosure, str
 assert.ok(validateLedger(duplicateLedger).some(error => error.includes("duplicate event_id")),
   "Duplicate event IDs must be rejected");
 
+const provenanceEvent = structuredClone(validDisclosure);
+provenanceEvent.event_id = "media-promotion-001";
+provenanceEvent.provenance = {
+  provider_id: "gdelt-doc-2",
+  queue_id: "mrq_0123456789abcdef01234567",
+  candidate_id: "mc_0123456789abcdef01234567",
+  promotion_method: "human_review_queue"
+};
+assert.deepEqual(validateEvent(provenanceEvent), [], "A reviewed media event with valid discovery provenance must pass");
+
+const invalidProvenance = structuredClone(provenanceEvent);
+invalidProvenance.provenance.provider_id = "unapproved-provider";
+assert.ok(validateEvent(invalidProvenance).some(error => error.includes("provenance.provider_id")),
+  "A promoted media event must retain the approved discovery provider");
+
+const duplicatePromotions = {
+  schema_version: "1.0.0",
+  events: [provenanceEvent, { ...structuredClone(provenanceEvent), event_id: "media-promotion-002" }]
+};
+assert.ok(validateLedger(duplicatePromotions).some(error => error.includes("duplicate promoted media candidate")),
+  "A single discovery candidate must not be promoted into the ledger more than once");
+
 console.log("VILANOVA EVIDENCE LEDGER TESTS PASSED — empty baseline, valid disclosure, valid metric, HTTPS enforcement, metric completeness, time-window ordering, mandatory publication dates, publication/capture chronology, observation/capture chronology, trend-window requirement, reviewer provenance, review chronology and duplicate-ID rejection.");

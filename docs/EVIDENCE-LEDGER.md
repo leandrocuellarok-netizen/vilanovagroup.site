@@ -52,3 +52,9 @@ Every `verified`, `disputed` or `withdrawn` event must carry a `review` object w
 7. If an API feed becomes stale or unavailable, label the dashboard stale/unavailable. Never animate old values as live.
 
 This ledger is a technical foundation, not a live data connection or a claim that Vilanova currently has access to any provider.
+
+## Media discovery provenance
+
+A news event promoted from the GDELT human-review queue may include a `provenance` object containing the provider ID, queue ID, candidate ID and the fixed `human_review_queue` promotion method. The validator checks these identifiers and rejects a second ledger event derived from the same candidate. This link is an audit reference, not a claim that GDELT verified the article. The source publisher page and the human review record remain the basis for any verification decision.
+
+Promotion is performed locally from a saved queue and a separate adjudication record. It does not fetch article pages, modify the source queue, write to GitHub or bypass the existing event validator.

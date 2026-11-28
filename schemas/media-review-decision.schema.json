@@ -1,0 +1,272 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vilanovagroup.site/schemas/media-review-decision.schema.json",
+  "title": "Vilanova Media Review Decision",
+  "description": "A separate human adjudication record required to promote one GDELT discovery candidate into the Evidence Ledger.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "queue_id",
+    "candidate_id",
+    "event_id",
+    "decision",
+    "reviewer_id",
+    "reviewed_at",
+    "method",
+    "decision_basis",
+    "claim",
+    "publisher",
+    "publication_at",
+    "confidence",
+    "entity",
+    "steps"
+  ],
+  "properties": {
+    "queue_id": {
+      "type": "string",
+      "pattern": "^mrq_[a-f0-9]{24}$"
+    },
+    "candidate_id": {
+      "type": "string",
+      "pattern": "^mc_[a-f0-9]{24}$"
+    },
+    "event_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]{2,99}$"
+    },
+    "decision": {
+      "enum": [
+        "verified",
+        "unverified",
+        "disputed",
+        "withdrawn"
+      ]
+    },
+    "reviewer_id": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 100
+    },
+    "reviewed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "method": {
+      "enum": [
+        "manual_source_review",
+        "official_record_cross_check",
+        "authorized_platform_data",
+        "other"
+      ]
+    },
+    "decision_basis": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000
+    },
+    "claim": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2000
+    },
+    "publisher": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 300
+    },
+    "publication_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "confidence": {
+      "enum": [
+        "high",
+        "medium",
+        "low"
+      ]
+    },
+    "entity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "display_name",
+        "entity_type"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "display_name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "entity_type": {
+          "enum": [
+            "person",
+            "creator",
+            "media_group",
+            "outlet",
+            "brand",
+            "organization",
+            "hashtag",
+            "topic"
+          ]
+        },
+        "canonical_url": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://"
+        }
+      }
+    },
+    "steps": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "prefixItems": [
+        {
+          "$ref": "#/$defs/publisher"
+        },
+        {
+          "$ref": "#/$defs/publication"
+        },
+        {
+          "$ref": "#/$defs/claim"
+        },
+        {
+          "$ref": "#/$defs/crossSource"
+        },
+        {
+          "$ref": "#/$defs/rights"
+        },
+        {
+          "$ref": "#/$defs/decision"
+        }
+      ],
+      "items": false
+    }
+  },
+  "$defs": {
+    "baseStep": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "step_id",
+        "status",
+        "checked_at",
+        "evidence_url",
+        "notes"
+      ],
+      "properties": {
+        "step_id": {
+          "type": "string"
+        },
+        "status": {
+          "const": "completed"
+        },
+        "checked_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "evidence_url": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://"
+        },
+        "notes": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        }
+      }
+    },
+    "publisher": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/baseStep"
+        },
+        {
+          "properties": {
+            "step_id": {
+              "const": "publisher_identity_and_original_page"
+            }
+          }
+        }
+      ]
+    },
+    "publication": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/baseStep"
+        },
+        {
+          "properties": {
+            "step_id": {
+              "const": "publication_timestamp"
+            }
+          }
+        }
+      ]
+    },
+    "claim": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/baseStep"
+        },
+        {
+          "properties": {
+            "step_id": {
+              "const": "claim_and_article_context"
+            }
+          }
+        }
+      ]
+    },
+    "crossSource": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/baseStep"
+        },
+        {
+          "properties": {
+            "step_id": {
+              "const": "cross_source_duplicate_story_check"
+            }
+          }
+        }
+      ]
+    },
+    "rights": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/baseStep"
+        },
+        {
+          "properties": {
+            "step_id": {
+              "const": "copyright_and_attribution_check"
+            }
+          }
+        }
+      ]
+    },
+    "decision": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/baseStep"
+        },
+        {
+          "properties": {
+            "step_id": {
+              "const": "human_reviewer_decision"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -12,7 +12,7 @@ const REVIEW_METHODS = new Set(["manual_source_review","official_record_cross_ch
 const REVIEW_REQUIRED_STATES = new Set(["verified","disputed","withdrawn"]);
 const RELATIONSHIPS = new Set(["sponsors","endorses","owns","controls","mentions","appears_with","other"]);
 const RELATED_STATUS = new Set(["documented","claimed","unverified"]);
-const EVENT_KEYS = new Set(["event_id","event_type","entity","claim","source","verification_status","confidence","observation_window","metric","related_entities","disclosure","review","notes"]);
+const EVENT_KEYS = new Set(["event_id","event_type","entity","claim","source","verification_status","confidence","observation_window","metric","related_entities","disclosure","review","provenance","notes"]);
 const ENTITY_KEYS = new Set(["id","display_name","entity_type","canonical_url"]);
 const SOURCE_KEYS = new Set(["publisher","url","source_type","published_at","captured_at"]);
 const METRIC_KEYS = new Set(["name","value","unit","platform","scope","window_start","window_end"]);
@@ -104,6 +104,20 @@ export function validateEvent(event, index = 0) {
         errors.push(path + ".review.reviewed_at cannot be earlier than source.captured_at");
     }
   }
+  if (event.provenance !== undefined) {
+    const provenance = event.provenance;
+    if (!isObject(provenance)) errors.push(path + ".provenance must be an object");
+    else {
+      hasOnlyKeys(provenance, new Set(["provider_id","queue_id","candidate_id","promotion_method"]), path + ".provenance", errors);
+      if (provenance.provider_id !== "gdelt-doc-2") errors.push(path + ".provenance.provider_id must equal gdelt-doc-2");
+      if (typeof provenance.queue_id !== "string" || !/^mrq_[a-f0-9]{24}$/.test(provenance.queue_id))
+        errors.push(path + ".provenance.queue_id must be a valid media review queue ID");
+      if (typeof provenance.candidate_id !== "string" || !/^mc_[a-f0-9]{24}$/.test(provenance.candidate_id))
+        errors.push(path + ".provenance.candidate_id must be a valid media candidate ID");
+      if (provenance.promotion_method !== "human_review_queue")
+        errors.push(path + ".provenance.promotion_method must equal human_review_queue");
+    }
+  }
   if (event.observation_window !== undefined) {
     validateWindow(event.observation_window, path + ".observation_window", errors);
     if (isObject(event.observation_window) && isDateTime(event.observation_window.end) &&
@@ -170,11 +184,17 @@ export function validateLedger(ledger) {
   if (ledger.schema_version !== "1.0.0") errors.push("ledger.schema_version must equal 1.0.0");
   if (!Array.isArray(ledger.events)) { errors.push("ledger.events must be an array"); return errors; }
   const seen = new Set();
+  const seenMediaCandidates = new Set();
   ledger.events.forEach((event, index) => {
     errors.push(...validateEvent(event, index));
     if (isObject(event) && typeof event.event_id === "string") {
       if (seen.has(event.event_id)) errors.push("duplicate event_id: " + event.event_id);
       seen.add(event.event_id);
+    }
+    const candidateId = isObject(event) && isObject(event.provenance) ? event.provenance.candidate_id : null;
+    if (typeof candidateId === "string") {
+      if (seenMediaCandidates.has(candidateId)) errors.push("duplicate promoted media candidate: " + candidateId);
+      seenMediaCandidates.add(candidateId);
     }
   });
   return errors;

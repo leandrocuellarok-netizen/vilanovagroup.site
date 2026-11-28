@@ -34,6 +34,8 @@ jobs:
         run: node scripts/test-gdelt-doc-adapter.mjs
       - name: Run media discovery human-review queue regression tests
         run: node scripts/test-media-review-queue.mjs
+      - name: Run reviewed media candidate promotion regression tests
+        run: node scripts/test-media-evidence-promotion.mjs
       - name: Run AI Fabric prompt quality regression tests
         run: node scripts/test-fabric-prompt.mjs
       - name: Validate evidence ledger

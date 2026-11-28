@@ -291,6 +291,33 @@
           "maxLength": 1000
         }
       }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provider_id",
+        "queue_id",
+        "candidate_id",
+        "promotion_method"
+      ],
+      "properties": {
+        "provider_id": {
+          "const": "gdelt-doc-2"
+        },
+        "queue_id": {
+          "type": "string",
+          "pattern": "^mrq_[a-f0-9]{24}$"
+        },
+        "candidate_id": {
+          "type": "string",
+          "pattern": "^mc_[a-f0-9]{24}$"
+        },
+        "promotion_method": {
+          "const": "human_review_queue"
+        }
+      },
+      "description": "Links a reviewed media event to its original GDELT discovery queue candidate."
     }
   },
   "allOf": [
