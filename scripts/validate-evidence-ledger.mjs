@@ -72,11 +72,23 @@ export function validateEvent(event, index = 0) {
     if (!isDateTime(event.source.captured_at)) errors.push(path + ".source.captured_at must be an ISO 8601 timestamp with timezone");
     if (event.source.published_at !== undefined && !isDateTime(event.source.published_at))
       errors.push(path + ".source.published_at must be an ISO 8601 timestamp with timezone when supplied");
+    const publicationRequired = ["brand_deal","endorsement","public_appearance","news_mention","ownership_claim"].includes(event.event_type);
+    if (publicationRequired && event.source.published_at === undefined)
+      errors.push(path + ".source.published_at is required to establish when this event was published");
+    if (isDateTime(event.source.published_at) && isDateTime(event.source.captured_at) &&
+        Date.parse(event.source.published_at) > Date.parse(event.source.captured_at))
+      errors.push(path + ".source.published_at cannot be later than source.captured_at");
   }
 
   if (!VERIFICATION.has(event.verification_status)) errors.push(path + ".verification_status is unsupported");
   if (!CONFIDENCE.has(event.confidence)) errors.push(path + ".confidence is unsupported");
-  if (event.observation_window !== undefined) validateWindow(event.observation_window, path + ".observation_window", errors);
+  if (event.observation_window !== undefined) {
+    validateWindow(event.observation_window, path + ".observation_window", errors);
+    if (isObject(event.observation_window) && isDateTime(event.observation_window.end) &&
+        isObject(event.source) && isDateTime(event.source.captured_at) &&
+        Date.parse(event.observation_window.end) > Date.parse(event.source.captured_at))
+      errors.push(path + ".observation_window.end cannot be later than source.captured_at");
+  }
   if (["platform_metric","hashtag_observation","trend_signal"].includes(event.event_type) && event.observation_window === undefined)
     errors.push(path + ".observation_window is required for this event type");
   if (event.event_type === "platform_metric" && event.metric === undefined)
