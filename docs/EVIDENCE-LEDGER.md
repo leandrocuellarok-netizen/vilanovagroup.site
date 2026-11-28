@@ -9,7 +9,8 @@ Use one evidence-event format across VILANOVA AI MEDIA and INFLUENCE RADAR AI. T
 ## Required discipline
 
 - Every event has a stable ID, entity, claim, source URL, publisher, capture timestamp, verification status and confidence.
-- Use HTTPS source URLs. Preserve both publication time and capture time when available.
+- Use HTTPS source URLs. For brand deals, endorsements, public appearances, news mentions and ownership claims, publication time is mandatory; capture time alone cannot establish when the event occurred.
+- Publication time must not be later than capture time. An observation-window end must not be later than the capture timestamp. Preserve both timestamps so recency can be audited independently.
 - Store timestamps with an explicit UTC offset; render them in America/Argentina/Buenos_Aires for the Argentina desk.
 - Add an observation window for platform metrics, hashtag observations and trend signals. A 24-hour score must identify its exact start and end.
 - A metric records its platform, scope, unit and comparison window. Views are not unique reach; views are not simultaneous viewers.
