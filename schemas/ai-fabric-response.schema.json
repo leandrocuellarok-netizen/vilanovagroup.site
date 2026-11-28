@@ -499,7 +499,10 @@
           "error_code": {
             "const": "budget_ceiling"
           }
-        }
+        },
+        "required": [
+          "error_code"
+        ]
       }
     }
   ]

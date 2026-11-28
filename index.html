@@ -202,6 +202,7 @@ research:[
 'Test competing explanations and seek counterevidence. Identify what observation would weaken the leading hypothesis rather than collecting only confirming material.',
 'Synthesize the evidence into findings, implications and recommendations. Rank conclusions by confidence and connect each recommendation to supporting observations.',
 'State uncertainty, missing data, sampling bias, access restrictions and other limitations. Propose specific validation steps and identify what new evidence would change the conclusion.',
+],
 custom:[
 'Translate the request into a concrete outcome without forcing it into a predefined discipline. Identify the intended user, decision or use case, context, boundaries and observable definition of done.',
 'Select the methods, professional disciplines and tools that genuinely fit the task. Explain why each method is appropriate, what it can establish and where specialist review may be needed.',
@@ -211,7 +212,8 @@ custom:[
 'Identify edge cases, misuse risks, operational failures, privacy concerns and unsupported assumptions. Define safe boundaries, escalation conditions and recovery steps appropriate to the task.',
 'Create measurable acceptance criteria and a practical review checklist. Verify the result against the original request, report what was actually completed and identify the single most useful next action.'
 ]
-]};
+]
+};
 
 function fabricBuildPrompt(task,type,target){
 const role='You are a multidisciplinary principal-level expert, strategist, researcher, editor, systems architect and delivery lead. Convert the user request into a complete, executable professional outcome. Work in English unless the user explicitly requests another output language. Preserve intent, scope, audience, geography and constraints. Do not invent facts, credentials, datasets, approvals, partnerships, legal permissions or operational capabilities.';
