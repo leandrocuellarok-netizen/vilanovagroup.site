@@ -20,7 +20,8 @@ const cases = [
   ["report", 8, "RESEARCH QUESTION AND EXECUTIVE PURPOSE"],
   ["spreadsheet", 7, "MODEL PURPOSE, USERS AND DECISION CONTEXT"],
   ["automation", 8, "PROCESS DISCOVERY AND CURRENT-STATE MAP"],
-  ["research", 7, "PROBLEM DEFINITION AND DECISION QUESTION"]
+  ["research", 7, "PROBLEM DEFINITION AND DECISION QUESTION"],
+  ["custom", 7, "TASK DEFINITION AND SUCCESS CONDITIONS"]
 ];
 
 for (const [type, expectedWorkstreams, expectedHeading] of cases) {
@@ -45,5 +46,6 @@ for (const [type, expectedWorkstreams, expectedHeading] of cases) {
 const fallback = sandbox.__buildPrompt(request, "unrecognized-category", 3000);
 assert.ok(fallback.includes("PROBLEM DEFINITION AND DECISION QUESTION"), "Unknown categories must fall back to the general research framework");
 assert.ok(html.includes("NO MODEL CONNECTED"), "The UI must disclose that a real model is not connected");
+assert.ok(html.includes('<option value="custom">Design any other task / custom outcome</option>'), "The interface must expose an explicit arbitrary-task category");
 
-console.log("VILANOVA AI FABRIC TESTS PASSED — 7 categories × 3 depth targets, Spanish intent preservation, specialist workstreams, no repeated workstream copy, honest prototype boundary and unknown-category fallback.");
+console.log("VILANOVA AI FABRIC TESTS PASSED — 8 categories × 3 depth targets, Spanish intent preservation, specialist workstreams, no repeated workstream copy, honest prototype boundary and unknown-category fallback.");

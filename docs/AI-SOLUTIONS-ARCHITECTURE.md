@@ -87,7 +87,8 @@ The user writes one sentence in Spanish and chooses an output family:
 - PDF research/report;
 - Excel and financial model;
 - automation and workflow;
-- general research or complex task.
+- general research or complex task;
+- any other task or custom outcome that does not fit a predefined category.
 
 The user selects a target final prompt length of 3,000, 4,500 or 6,000 words. The interface must preserve the original Spanish request, normalize the intent, identify missing critical constraints and produce a structured English prompt. It must not invent context to fill a word target.
 
@@ -146,3 +147,10 @@ The following remain unconnected until explicitly authorized:
 - storage of user prompts or third-party creator data beyond public, necessary evidence.
 
 The next implementation step after the static prototype is a provider-neutral backend contract and a small, read-only public-evidence pilot. No purchase, account connection or deployment is implied by this document.
+
+
+## 6. Provider-neutral API contract
+
+The versioned request and response boundary is specified in [AI-FABRIC-API-CONTRACT.md](AI-FABRIC-API-CONTRACT.md), with machine-readable JSON Schemas in `schemas/ai-fabric-request.schema.json` and `schemas/ai-fabric-response.schema.json`.
+
+The contract deliberately excludes provider selection, model selection, credentials, arbitrary callback URLs and client-controlled spend limits. It distinguishes a short local template preview from a model-generated prompt that has actually met its selected word-count target. The contract tests run offline in CI; they do not connect a provider or prove that a model is configured.

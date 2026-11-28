@@ -42,6 +42,8 @@ jobs:
         run: node scripts/test-media-ownership-registry.mjs
       - name: Run AI Fabric prompt quality regression tests
         run: node scripts/test-fabric-prompt.mjs
+      - name: Run AI Fabric API contract regression tests
+        run: node scripts/test-ai-fabric-contract.mjs
       - name: Validate evidence ledger
         run: node scripts/validate-evidence-ledger.mjs
       - name: Run evidence ledger regression tests

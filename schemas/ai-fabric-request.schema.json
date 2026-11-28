@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vilanovagroup.site/schemas/ai-fabric-request.schema.json",
+  "title": "VILANOVA AI FABRIC prompt request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "task",
+    "category",
+    "source_language",
+    "output_language",
+    "target_word_count",
+    "retention_mode"
+  ],
+  "properties": {
+    "task": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1200,
+      "pattern": "\\S"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "image",
+        "writing",
+        "business",
+        "report",
+        "spreadsheet",
+        "automation",
+        "research",
+        "custom"
+      ]
+    },
+    "source_language": {
+      "const": "es"
+    },
+    "output_language": {
+      "const": "en"
+    },
+    "target_word_count": {
+      "type": "integer",
+      "enum": [
+        3000,
+        4500,
+        6000
+      ]
+    },
+    "retention_mode": {
+      "const": "ephemeral"
+    },
+    "client_request_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "constraints": {
+      "type": "array",
+      "maxItems": 20,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 500,
+        "pattern": "\\S"
+      }
+    }
+  }
+}
