@@ -77,6 +77,12 @@ assert.ok(existsSync(resolve(root, "scripts/test-influencer-freshness.mjs")), "T
 assert.ok(existsSync(resolve(root, "docs/PROFILE-REVIEW-CADENCE.md")), "The profile review cadence must be documented");
 assert.ok(siteContentHasReviewExport, "Spreadsheet-safe review queue export and CI artifact must remain wired and documented");
 assert.ok(html.includes("PROFILE-REVIEW-CADENCE.md"), "The public site must link to the profile review cadence");
+assert.ok(existsSync(resolve(root, "scripts/build-commercial-intelligence.mjs")), "Commercial intelligence report builder must exist");
+assert.ok(existsSync(resolve(root, "scripts/test-commercial-intelligence.mjs")), "Commercial intelligence regression tests must exist");
+assert.ok(existsSync(resolve(root, "docs/COMMERCIAL-INTELLIGENCE-REPORT.md")), "Commercial intelligence report standard must exist");
+assert.ok(html.includes('href="https://github.com/leandrocuellarok-netizen/vilanovagroup.site/blob/main/docs/COMMERCIAL-INTELLIGENCE-REPORT.md"'), "The public site must link to the commercial intelligence standard");
+assert.ok(workflow.includes("node scripts/build-commercial-intelligence.mjs --json") && workflow.includes("commercial-intelligence-report"), "Commercial intelligence JSON/CSV artifact must be wired into CI");
+
 const influencerSchema = JSON.parse(readFileSync(resolve(root, "schemas/influencer-profile.schema.json"), "utf8"));
 const influencerDirectory = JSON.parse(readFileSync(resolve(root, "data/influencer-profiles.json"), "utf8"));
 assert.equal(influencerSchema.$schema, "https://json-schema.org/draft/2020-12/schema", "Influencer profile schema must declare JSON Schema 2020-12");
@@ -105,4 +111,4 @@ try {
   rmSync(tempDir, { recursive: true, force: true });
 }
 
-console.log("VILANOVA SITE VALIDATION PASSED — " + expectedSections.length + " sections, " + assetPaths.length + " local assets, unique IDs, internal links, footer/contact policy, AI module honesty, reduced motion, keyboard focus and inline JavaScript syntax.");
+console.log("VILANOVA SITE VALIDATION PASSED — " + expectedSections.length + " sections, " + assetPaths.length + " local assets, unique IDs, internal links, footer/contact policy, AI module honesty, commercial intelligence pipeline, reduced motion, keyboard focus and inline JavaScript syntax.");

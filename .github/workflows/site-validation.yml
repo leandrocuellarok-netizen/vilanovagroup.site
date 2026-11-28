@@ -56,3 +56,18 @@ jobs:
         run: node scripts/influence-radar.mjs
       - name: Run Influence Radar aggregation regression tests
         run: node scripts/test-influence-radar.mjs
+      - name: Build evidence-backed commercial intelligence report
+        run: node scripts/build-commercial-intelligence.mjs
+      - name: Run commercial intelligence regression tests
+        run: node scripts/test-commercial-intelligence.mjs
+      - name: Export commercial intelligence JSON and spreadsheet-safe CSV
+        run: |
+          node scripts/build-commercial-intelligence.mjs --json > artifacts/commercial-intelligence.json
+          node scripts/build-commercial-intelligence.mjs --csv > artifacts/commercial-intelligence.csv
+      - name: Upload commercial intelligence report
+        uses: actions/upload-artifact@v4
+        with:
+          name: commercial-intelligence-report
+          path: artifacts/commercial-intelligence.*
+          if-no-files-found: error
+          retention-days: 14
