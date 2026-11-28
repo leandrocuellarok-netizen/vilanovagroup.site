@@ -26,6 +26,12 @@ A public endorsement is reported separately. It is never automatically treated a
 
 `documented` means that the cited source supports the relationship claim at the source publication time. It does **not** establish that a sponsorship or endorsement remains active today. Every documented relationship therefore carries `temporal_status: current_status_not_assessed`. The report must not label a relationship current, ongoing or active unless separately dated continuation evidence is recorded and reviewed. Likewise, an ended relationship requires explicit termination evidence; absence of a recent post is not proof of termination.
 
+## Source-level deduplication
+
+The report builder counts an eligible event once per primary entity, event type, normalized source URL and sorted set of related entity IDs, relationship types and relationship statuses. URL fragments, trailing slashes, query-parameter order and common click-tracking parameters (including UTM parameters, fbclid and gclid) do not create a second evidence event. A second record from the same source remains distinct when its counterparty relationship set differs.
+
+Duplicates are excluded before event and relationship totals are calculated and are exposed through the duplicate_source_event exclusion counter. This is deterministic URL-level deduplication, not semantic duplicate detection: syndicated copies hosted at different URLs and substantially rewritten claims still require human review.
+
 ## Unresolved claims
 
 A verified event whose counterparty is absent, claimed or unverified is retained in the report's unresolved-claims section. It is not promoted to a documented relationship. A human reviewer must open the source and resolve the counterparty evidence before the record can be used as a confirmed commercial relationship.

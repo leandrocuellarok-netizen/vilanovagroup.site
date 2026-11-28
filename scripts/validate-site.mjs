@@ -12,6 +12,9 @@ const auditScript = readFileSync(resolve(root, "scripts/audit-influencer-freshne
 const auditTests = readFileSync(resolve(root, "scripts/test-influencer-freshness.mjs"), "utf8");
 const reviewDocs = readFileSync(resolve(root, "docs/PROFILE-REVIEW-CADENCE.md"), "utf8");
 const workflow = readFileSync(resolve(root, ".github/workflows/site-validation.yml"), "utf8");
+const commercialBuilder = readFileSync(resolve(root, "scripts/build-commercial-intelligence.mjs"), "utf8");
+const commercialTests = readFileSync(resolve(root, "scripts/test-commercial-intelligence.mjs"), "utf8");
+const commercialDocs = readFileSync(resolve(root, "docs/COMMERCIAL-INTELLIGENCE-REPORT.md"), "utf8");
 const siteContentHasReviewExport = auditScript.includes("exportReviewQueueCsv") &&
   auditTests.includes("Formula-like") && reviewDocs.includes("--csv > influencer-review-queue.csv") &&
   workflow.includes("actions/upload-artifact@v4");
@@ -82,6 +85,9 @@ assert.ok(existsSync(resolve(root, "scripts/test-commercial-intelligence.mjs")),
 assert.ok(existsSync(resolve(root, "docs/COMMERCIAL-INTELLIGENCE-REPORT.md")), "Commercial intelligence report standard must exist");
 assert.ok(html.includes('href="https://github.com/leandrocuellarok-netizen/vilanovagroup.site/blob/main/docs/COMMERCIAL-INTELLIGENCE-REPORT.md"'), "The public site must link to the commercial intelligence standard");
 assert.ok(workflow.includes("node scripts/build-commercial-intelligence.mjs --json") && workflow.includes("commercial-intelligence-report"), "Commercial intelligence JSON/CSV artifact must be wired into CI");
+assert.ok(commercialBuilder.includes("commercialEventKey") && commercialBuilder.includes("duplicate_source_event") &&
+  commercialTests.includes("tracking-parameter duplicate") && commercialDocs.includes("Source-level deduplication"),
+  "Commercial intelligence must deduplicate repeated source events and document its limits.");
 
 const influencerSchema = JSON.parse(readFileSync(resolve(root, "schemas/influencer-profile.schema.json"), "utf8"));
 const influencerDirectory = JSON.parse(readFileSync(resolve(root, "data/influencer-profiles.json"), "utf8"));

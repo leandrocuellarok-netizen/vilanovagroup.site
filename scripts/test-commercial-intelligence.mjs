@@ -18,6 +18,7 @@ function event({
   related = [],
   hoursAgo = 3,
   publisher = "Synthetic Evidence Publisher",
+  sourceUrl,
   disclosure = { status: "disclosed", text: "Synthetic test disclosure only." }
 }) {
   return {
@@ -27,7 +28,7 @@ function event({
     claim: "Synthetic fixture for automated tests only.",
     source: {
       publisher,
-      url: "https://example.org/evidence/" + id,
+      url: sourceUrl ?? "https://example.org/evidence/" + id,
       source_type: type === "brand_deal" ? "brand_disclosure" : "creator_disclosure",
       published_at: iso(hoursAgo),
       captured_at: iso(hoursAgo - 0.1)
@@ -88,13 +89,22 @@ assert.equal(empty.summary.documented_brand_relationships, 0);
 assert.equal(exportCommercialIntelligenceCsv(empty).trimEnd().split("\r\n").length, 1,
   "An empty report must export a header row only.");
 
+const documentedRelated = [
+  { id: "brand-001", display_name: "Synthetic Brand One", relationship: "sponsors", status: "documented" },
+  { id: "brand-002", display_name: "Synthetic Brand Two", relationship: "sponsors", status: "claimed" }
+];
+
 const fixtures = [
+  event({ id: "deal-documented", related: documentedRelated }),
   event({
-    id: "deal-documented",
-    related: [
-      { id: "brand-001", display_name: "Synthetic Brand One", relationship: "sponsors", status: "documented" },
-      { id: "brand-002", display_name: "Synthetic Brand Two", relationship: "sponsors", status: "claimed" }
-    ]
+    id: "deal-documented-duplicate",
+    sourceUrl: "https://example.org/evidence/deal-documented/?utm_source=mail&fbclid=fixture#disclosure",
+    related: [...documentedRelated].reverse()
+  }),
+  event({
+    id: "deal-second-brand-same-source",
+    sourceUrl: "https://example.org/evidence/deal-documented?utm_campaign=fixture",
+    related: [{ id: "brand-003", display_name: "Synthetic Brand Three", relationship: "sponsors", status: "documented" }]
   }),
   event({ id: "deal-no-counterparty", personId: "creator-002", personName: "Unmatched Test Creator", related: [] }),
   event({
@@ -133,10 +143,14 @@ const report = buildCommercialIntelligence(
 assert.equal(report.status, "evidence_available");
 assert.equal(report.ranking, null);
 assert.equal(report.composite_score, null);
-assert.equal(report.summary.accepted_verified_events, 3);
-assert.equal(report.summary.documented_brand_deal_events, 1);
-assert.equal(report.summary.documented_brand_relationships, 1);
-assert.equal(report.summary.distinct_sponsoring_entities, 1);
+assert.equal(report.summary.accepted_verified_events, 4,
+  "The repeated source event must not inflate the accepted-event count.");
+assert.equal(report.summary.documented_brand_deal_events, 2);
+assert.equal(report.summary.documented_brand_relationships, 2);
+assert.equal(report.summary.distinct_sponsoring_entities, 2,
+  "A second documented counterparty from the same source must remain distinct.");
+assert.equal(report.exclusions.duplicate_source_event, 1,
+  "A tracking-parameter duplicate must be excluded after URL and counterparty normalization.");
 assert.equal(report.summary.documented_public_endorsements, 1);
 assert.equal(report.summary.unresolved_brand_or_endorsement_claims, 2);
 assert.equal(report.summary.directory_profile_matches, 1);
@@ -219,4 +233,4 @@ assert.throws(() => buildCommercialIntelligence({ schema_version: "1.0.0", event
   /Invalid evidence ledger/);
 assert.throws(() => exportCommercialIntelligenceCsv(null), /generated_at and an entities array/);
 
-console.log("VILANOVA COMMERCIAL INTELLIGENCE TESTS PASSED — empty baseline, verified-only commercial events, documented sponsor relationships, separate endorsements, unresolved claims, exact profile matching, future-date exclusions, reviewer provenance, spreadsheet formula-injection protection and deterministic CSV.");
+console.log("VILANOVA COMMERCIAL INTELLIGENCE TESTS PASSED — empty baseline, verified-only commercial events, documented sponsor relationships, source-level deduplication, separate endorsements, unresolved claims, exact profile matching, future-date exclusions, reviewer provenance, spreadsheet formula-injection protection and deterministic CSV.");

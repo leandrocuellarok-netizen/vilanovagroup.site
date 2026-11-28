@@ -14,6 +14,37 @@ const timestamp = value => {
   return Number.isFinite(parsed) ? parsed : null;
 };
 const normalizeName = value => String(value ?? "").normalize("NFKC").trim().replace(/\s+/g, " ").toLocaleLowerCase("en");
+const TRACKING_PARAMETER = new RegExp("^(utm_[a-z0-9_]+|fbclid|gclid|dclid|mc_cid|mc_eid|igshid|ref_src|ref_url)$", "i");
+
+function normalizeSourceUrl(value) {
+  try {
+    const url = new URL(value);
+    url.hash = "";
+    for (const key of [...url.searchParams.keys()]) {
+      if (TRACKING_PARAMETER.test(key)) url.searchParams.delete(key);
+    }
+    url.searchParams.sort();
+    while (url.pathname.length > 1 && url.pathname.endsWith("/")) {
+      url.pathname = url.pathname.slice(0, -1);
+    }
+    const normalized = url.toString();
+    return normalized.endsWith("/") ? normalized.slice(0, -1) : normalized;
+  } catch {
+    return String(value ?? "");
+  }
+}
+
+function commercialEventKey(event) {
+  const counterparties = (event.related_entities ?? [])
+    .map(item => [item.id, item.relationship, item.status])
+    .sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b)));
+  return JSON.stringify([
+    event.entity.id,
+    event.event_type,
+    normalizeSourceUrl(event.source.url),
+    counterparties
+  ]);
+}
 
 function sourceRecord(event) {
   return {
@@ -78,9 +109,11 @@ export function buildCommercialIntelligence(ledger, directory, options = {}) {
     non_person_entity: 0,
     not_verified: 0,
     low_confidence: 0,
-    future_dated: 0
+    future_dated: 0,
+    duplicate_source_event: 0
   };
   const acceptedEventIds = new Set();
+  const seenEvidenceKeys = new Set();
 
   function personFor(event) {
     const id = event.entity.id;
@@ -138,6 +171,13 @@ export function buildCommercialIntelligence(ledger, directory, options = {}) {
       exclusions.future_dated++;
       continue;
     }
+
+    const evidenceKey = commercialEventKey(event);
+    if (seenEvidenceKeys.has(evidenceKey)) {
+      exclusions.duplicate_source_event++;
+      continue;
+    }
+    seenEvidenceKeys.add(evidenceKey);
 
     acceptedEventIds.add(event.event_id);
     const person = personFor(event);
@@ -224,6 +264,7 @@ export function buildCommercialIntelligence(ledger, directory, options = {}) {
       disclosure_rule: "Disclosure status is reproduced from the source record. Missing or unclear disclosure is not interpreted as proof that a relationship is undisclosed.",
       relationship_temporality: "Documented means the source supports the relationship claim at publication time. It does not establish that a sponsorship or endorsement is active today. Current status remains not_assessed unless separately dated continuation or termination evidence is recorded and reviewed.",
       identity_matching: "Directory records are joined only by exact profile_id/entity.id and matching public display name or recorded alias.",
+      source_deduplication: "Eligible events are counted once per primary entity, event type, normalized source URL and sorted counterparty relationship set. URL fragments and common click-tracking parameters are ignored; distinct counterparties remain separate.",
       ranking_rule: "No leaderboard, popularity score, fame score or composite influence score is calculated.",
       missing_data: "Unknown or absent evidence is not zero and is not a negative finding.",
       limitations: "This report processes only the local evidence ledger and public-profile directory. It does not fetch source URLs, query platform accounts, verify contracts, or establish private beneficial ownership."
