@@ -1,7 +1,8 @@
 # VILANOVA AI SOLUTIONS — Data Provider Readiness Review
 
 **Research checked:** 28 November 2026.  
-**Status:** feasibility review only. No provider is connected. No API app, paid account, provider contract, account connection, credit purchase or vendor terms have been accepted.  
+**Status:** feasibility review only. No provider is connected. No API app, paid account, provider contract, account connection, credit purchase or vendor terms have been accepted.
+**Implementation update (28 November 2026):** a read-only GDELT DOC adapter prototype and offline regression suite now exist; they are not connected and CI uses mocked responses only.  
 **Decision rule:** a provider is not connected until its commercial eligibility, scope, written terms, authorization and cost controls have been reviewed and explicitly approved.
 
 ## Executive decision
@@ -100,7 +101,7 @@ Internal standards:
 
 ## Recommended implementation sequence
 
-1. Build the first read-only news adapter around GDELT, with caching, rate-limit backoff and dated source capture.
+1. Review current GDELT project terms, then run a manually initiated read-only pilot through docs/GDELT-NEWS-INGESTION.md; keep CI mocked and do not enable unattended polling.
 2. Add YouTube public video/channel snapshots for a manually curated allowlist of official channels; never label views as unique reach.
 3. Continue manual source review for brand deals, endorsements, ownership and media appearances.
 4. Prepare a Brandwatch discovery brief and compare coverage, rights, price, API access and export conditions before any commitment.
