@@ -140,6 +140,33 @@ assert.ok(html.includes('href="https://github.com/leandrocuellarok-netizen/vilan
 assert.ok(workflow.includes("node scripts/test-gdelt-doc-adapter.mjs"),
   "The offline GDELT adapter tests must run in CI");
 
+const mediaQueueScriptPath = resolve(root, "scripts/build-media-review-queue.mjs");
+const mediaQueueTestsPath = resolve(root, "scripts/test-media-review-queue.mjs");
+const mediaQueueSchemaPath = resolve(root, "schemas/media-review-queue.schema.json");
+const mediaQueueDocsPath = resolve(root, "docs/MEDIA-REVIEW-QUEUE.md");
+assert.ok(existsSync(mediaQueueScriptPath), "The GDELT human-review queue builder must exist");
+assert.ok(existsSync(mediaQueueTestsPath), "The human-review queue regression tests must exist");
+assert.ok(existsSync(mediaQueueSchemaPath), "The media review queue JSON Schema must exist");
+assert.ok(existsSync(mediaQueueDocsPath), "The human-review queue protocol must be documented");
+const mediaQueueScript = readFileSync(mediaQueueScriptPath, "utf8");
+const mediaQueueTests = readFileSync(mediaQueueTestsPath, "utf8");
+const mediaQueueSchema = JSON.parse(readFileSync(mediaQueueSchemaPath, "utf8"));
+const mediaQueueDocs = readFileSync(mediaQueueDocsPath, "utf8");
+assert.equal(mediaQueueSchema.$schema, "https://json-schema.org/draft/2020-12/schema", "Media review queue schema must declare JSON Schema 2020-12");
+assert.equal(mediaQueueSchema.properties.ledger_imported.const, false, "Discovery candidates must never be marked as imported evidence");
+assert.equal(mediaQueueSchema.$defs.candidate.properties.publication_at.const, null, "Publisher publication time must remain unknown until human review");
+assert.ok(!("confidence" in mediaQueueSchema.$defs.candidate.properties) && !("verification_status" in mediaQueueSchema.$defs.candidate.properties),
+  "Discovery candidates must not contain confidence or verification claims");
+assert.ok(mediaQueueScript.includes("ledger_imported: false") && mediaQueueScript.includes('review_status: "unreviewed"') &&
+  mediaQueueScript.includes("publication_at: null"), "Queue builder must preserve candidate-only status");
+assert.ok(mediaQueueTests.includes("no evidence imported") && mediaQueueTests.includes("deterministic") &&
+  mediaQueueTests.includes("publication_at must remain null"), "Queue tests must cover provenance, deterministic deduplication and non-promotion");
+assert.ok(mediaQueueDocs.includes("does not fetch articles") && mediaQueueDocs.includes("Required human review"),
+  "Queue documentation must state its offline boundary and review requirements");
+assert.ok(html.includes('href="https://github.com/leandrocuellarok-netizen/vilanovagroup.site/blob/main/docs/MEDIA-REVIEW-QUEUE.md"'),
+  "The public media desk must link to the human-review queue protocol");
+assert.ok(workflow.includes("node scripts/test-media-review-queue.mjs"), "Media review queue tests must run in CI");
+
 assert.ok(workflow.includes("node scripts/validate-provider-registry.mjs") && workflow.includes("node scripts/test-provider-registry.mjs"),
   "Provider registry validation and regression tests must run in CI");
 
