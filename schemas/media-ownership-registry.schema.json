@@ -178,7 +178,8 @@
           "as_of",
           "confidence",
           "source_ids",
-          "caveat"
+          "caveat",
+          "dispute_basis"
         ],
         "properties": {
           "claim_id": {
@@ -256,6 +257,10 @@
             "items": {
               "type": "string"
             }
+          },
+          "dispute_basis": {
+            "type": "string",
+            "minLength": 20
           }
         }
       }

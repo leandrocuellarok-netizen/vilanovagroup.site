@@ -96,8 +96,8 @@ export function validateMediaOwnershipRegistry(registry) {
     }
     if (claim.status === "disputed") {
       if (claimSources.length < 2) errors.push("disputed claims require at least two retrievable sources: " + claim.claim_id);
-      if (!Array.isArray(claim.conflicts_with) || claim.conflicts_with.length === 0) {
-        errors.push("disputed claims require a conflicts_with reference: " + claim.claim_id);
+      if (typeof claim.dispute_basis !== "string" || claim.dispute_basis.length < 20) {
+        errors.push("disputed claims require a documented dispute_basis: " + claim.claim_id);
       }
     }
     if (claim.claim_kind === "governance" &&

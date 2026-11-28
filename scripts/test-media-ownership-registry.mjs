@@ -44,6 +44,10 @@ candidate.claims.find(claim => claim.claim_id === "telefe-later-sale-report-2026
 assert.ok(validateMediaOwnershipRegistry(candidate).some(error => error.includes("at least two retrievable sources")), "Disputed claims must retain at least two sources.");
 
 candidate = clone(registry);
+candidate.claims.find(claim => claim.claim_id === "blender-reported-control-2025").dispute_basis = "";
+assert.ok(validateMediaOwnershipRegistry(candidate).some(error => error.includes("documented dispute_basis")), "Disputed claims must explain the source conflict.");
+
+candidate = clone(registry);
 candidate.entities.push(clone(candidate.entities[0]));
 assert.ok(validateMediaOwnershipRegistry(candidate).some(error => error.includes("duplicate or missing entity_id")), "Duplicate entity IDs must be rejected.");
 

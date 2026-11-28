@@ -21,7 +21,7 @@
 |---|---|---|
 | `primary_source_confirmed` | Supported by a corporate disclosure, official filing or transaction-counsel notice | State only the exact claim and scope supported by the source |
 | `reported_not_primary_confirmed` | Reported by a news publisher, without primary corporate confirmation | Attribute the claim to the publisher; never present it as verified ownership |
-| `disputed` | Materially conflicting or inconsistent sources | Display the conflict and withhold a current ownership conclusion |
+| `disputed` | Materially conflicting or inconsistent sources, with a written dispute basis | Display the conflict and withhold a current ownership conclusion |
 | `historical_snapshot_only` | A dated historical research snapshot | Historical context only; never silently roll forward |
 
 ## Interpretation controls
