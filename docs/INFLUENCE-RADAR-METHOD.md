@@ -8,7 +8,7 @@ The first operational layer is an evidence snapshot, not an influencer leaderboa
 ## Eligibility
 An observation qualifies only when its event type is brand deal, endorsement, public appearance, news mention or platform metric; the entity is a person or creator; verification is `verified`; confidence is high or medium; and a dated observation falls inside the window without being future-dated. Platform metric snapshots must also have been captured inside the window.
 
-Undated items are excluded. Capture time alone does not prove that an old event happened recently.
+Undated brand deals, endorsements, public appearances, news mentions and ownership claims are rejected at ledger validation because capture time alone does not establish when the event occurred. Publication time cannot be later than capture time. For platform metrics, hashtag observations and trend signals, the observation-window end cannot be later than the source capture time. The 24-hour engine also excludes records outside the requested window.
 
 ## Separate dimensions
 1. **Brand deals:** documented sponsorships or commercial collaborations.
