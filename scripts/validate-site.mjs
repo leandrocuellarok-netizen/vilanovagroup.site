@@ -8,6 +8,13 @@ const root = process.cwd();
 const htmlPath = resolve(root, "index.html");
 assert.ok(existsSync(htmlPath), "index.html must exist");
 const html = readFileSync(htmlPath, "utf8");
+const auditScript = readFileSync(resolve(root, "scripts/audit-influencer-freshness.mjs"), "utf8");
+const auditTests = readFileSync(resolve(root, "scripts/test-influencer-freshness.mjs"), "utf8");
+const reviewDocs = readFileSync(resolve(root, "docs/PROFILE-REVIEW-CADENCE.md"), "utf8");
+const workflow = readFileSync(resolve(root, ".github/workflows/site-validation.yml"), "utf8");
+const siteContentHasReviewExport = auditScript.includes("exportReviewQueueCsv") &&
+  auditTests.includes("Formula-like") && reviewDocs.includes("--csv > influencer-review-queue.csv") &&
+  workflow.includes("actions/upload-artifact@v4");
 
 const expectedSections = ["ecosystem", "ventures", "intelligence", "ai-solutions", "network"];
 const expectedNav = ["THE ECOSYSTEM", "VENTURES", "VILANOVA AI MEDIA", "VILANOVA AI SOLUTIONS", "NETWORK"];
@@ -68,6 +75,7 @@ assert.ok(existsSync(resolve(root, "scripts/test-influencer-profiles.mjs")), "Th
 assert.ok(existsSync(resolve(root, "scripts/audit-influencer-freshness.mjs")), "The public influencer freshness audit must exist");
 assert.ok(existsSync(resolve(root, "scripts/test-influencer-freshness.mjs")), "The public influencer freshness audit tests must exist");
 assert.ok(existsSync(resolve(root, "docs/PROFILE-REVIEW-CADENCE.md")), "The profile review cadence must be documented");
+assert.ok(siteContentHasReviewExport, "Spreadsheet-safe review queue export and CI artifact must remain wired and documented");
 assert.ok(html.includes("PROFILE-REVIEW-CADENCE.md"), "The public site must link to the profile review cadence");
 const influencerSchema = JSON.parse(readFileSync(resolve(root, "schemas/influencer-profile.schema.json"), "utf8"));
 const influencerDirectory = JSON.parse(readFileSync(resolve(root, "data/influencer-profiles.json"), "utf8"));

@@ -5,6 +5,12 @@ import { validateProfileDirectory } from "./validate-influencer-profiles.mjs";
 
 const DAY = 86400000;
 const PRIORITY = { critical: 0, high: 1, normal: 2 };
+const CSV_COLUMNS = [
+  "audit_generated_at", "profile_id", "display_name", "category", "status", "priority",
+  "last_reviewed_at", "review_age_days", "issue_code", "issue_priority", "issue_age_days",
+  "threshold_days", "source_publisher", "source_url", "source_captured_at", "source_age_days",
+  "issue_detail"
+];
 const object = value => value !== null && typeof value === "object" && !Array.isArray(value);
 function ageDays(timestamp, now) { return Math.floor((now - Date.parse(timestamp)) / DAY); }
 function sourceKey(source) {
@@ -100,11 +106,43 @@ export function auditProfileDirectory(directory, options = {}) {
     queue
   };
 }
+
+function csvCell(value) {
+  if (value === null || value === undefined) return '""';
+  let text = String(value).replace(/\r\n|\r|\n/g, " ");
+  // Prefix spreadsheet formula-like text so opening the export cannot execute it.
+  if (typeof value === "string" && /^[\u0000-\u0020]*[=+\-@]/.test(text)) text = "'" + text;
+  return '"' + text.replace(/"/g, '""') + '"';
+}
+
+/** Flatten review issues into spreadsheet-safe RFC 4180 CSV rows. */
+export function exportReviewQueueCsv(report) {
+  if (!object(report) || !Array.isArray(report.queue) || typeof report.generated_at !== "string")
+    throw new Error("report must contain generated_at and a queue array");
+  const rows = [CSV_COLUMNS];
+  for (const profile of report.queue) {
+    if (!object(profile) || !Array.isArray(profile.issues)) continue;
+    for (const issue of profile.issues) {
+      const sources = Array.isArray(issue.sources) && issue.sources.length ? issue.sources : [null];
+      for (const source of sources) {
+        rows.push([
+          report.generated_at, profile.profile_id, profile.display_name, profile.category, profile.status,
+          profile.priority, profile.last_reviewed_at, profile.review_age_days, issue.code, issue.priority,
+          issue.age_days ?? "", issue.threshold_days ?? "", source?.publisher ?? "", source?.url ?? "",
+          source?.captured_at ?? "", source?.age_days ?? "", issue.detail ?? ""
+        ]);
+      }
+    }
+  }
+  return rows.map(row => row.map(csvCell).join(",")).join("\r\n") + "\r\n";
+}
+
 function run() {
   try {
     const directory = JSON.parse(readFileSync(resolve(process.cwd(), "data/influencer-profiles.json"), "utf8"));
     const report = auditProfileDirectory(directory);
-    if (process.argv.includes("--json")) console.log(JSON.stringify(report, null, 2));
+    if (process.argv.includes("--csv")) process.stdout.write(exportReviewQueueCsv(report));
+    else if (process.argv.includes("--json")) console.log(JSON.stringify(report, null, 2));
     else {
       console.log("VILANOVA PROFILE REVIEW AUDIT — " + report.status.toUpperCase());
       console.log("Profiles: " + report.summary.profiles_total + " | Queued: " + report.summary.profiles_queued +
